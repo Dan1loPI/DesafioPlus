@@ -28,33 +28,27 @@ class ClientesController extends AppController
             'contain' => ['Contatos', 'Enderecos', 'Enderecos.Cidades', 'Enderecos.Cidades.Estados'],
         ]);
 
-
-
         $this->set('cliente', $cliente);
     }
 
 
     public function add()
     {
-
         $cliente = $this->Clientes->newEntity();
         if ($this->request->is('post')) {
 
             $cliente = $this->Clientes->patchEntity($cliente, $this->request->getData());
 
-
             if ($this->Clientes->save($cliente)) {
 
-                $this->Flash->success('Mesa salva com sucesso!');
+                $this->Flash->success('Cliente salvo com sucesso!');
                 return $this->redirect(['action' => 'index']);
             } else {
-
                 $this->Flash->error('Cliente não foi salvo');
             }
         }
         $this->set(compact('cliente'));
     }
-
 
     public function endereco($id = null)
     {
@@ -72,11 +66,9 @@ class ClientesController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             } else {
-
                 $this->Flash->error('Endereço não foi salvo');
             }
         }
-
         $cidades = $this->Cidades->find('list', ['limit' => 20000]);
         $this->set(compact('endereco', 'cidades'));
     }
@@ -89,9 +81,6 @@ class ClientesController extends AppController
         if ($this->request->is('post')) {
             $contato = $this->Contatos->patchEntity($contato, $this->request->getData());
 
-            var_dump($contato);
-
-            
             $contato->cliente_id = $id;
 
             if ($this->Contatos->save($contato)) {
@@ -102,9 +91,7 @@ class ClientesController extends AppController
 
                 $this->Flash->error('Contato não foi salvo');
             }
-            
         }
-
         $this->set(compact('contato'));
     }
 
@@ -125,11 +112,7 @@ class ClientesController extends AppController
             }else{
                 $this->Flash->error('Erro ao editar cliente');
             }
-
         }
-
-
-
         $this->set(compact('cliente'));
     }
 
@@ -167,6 +150,5 @@ class ClientesController extends AppController
             $this->Flash->error('Erro ao Inativar este contato!');
             return $this->redirect(['action' => 'index']);
         }
-
     }
 }

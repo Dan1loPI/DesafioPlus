@@ -88,13 +88,7 @@ class ReservasTable extends Table
         return $validator;
     }
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
+
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['usuario_id'], 'Users'));
@@ -106,48 +100,36 @@ class ReservasTable extends Table
 
     public function checarMesa($reserva)
     {
+        $consultaMesa = $this->verificaMesa($reserva->mesa_id);
 
+        $dataMesaConvertida = date_format($reserva->data_reserva, "Y/m/d");
 
+        $consulta = $this->find()
+            ->select(['Reservas.data_reserva', 'Reservas.status', 'Mesas.num_mesa'])
+            ->contain(['Mesas'])
+            ->where(['Reservas.data_reserva' => $dataMesaConvertida])
+            ->where(['Mesas.num_mesa =' => $consultaMesa->num_mesa])
+            ->where(['Reservas.status =' => 'Agendado'])
+            ->first();
+
+        if ($consulta) {
+            $resultado = false;
+        } else {
+            $resultado = true;
+        }
+
+        return $resultado;
+    }
+
+    protected function verificaMesa($id)
+    {
         $verificaMesa = TableRegistry::getTableLocator()->get('Mesas');
         $consultaMesa = $verificaMesa->find()
             ->select(['num_mesa'])
-            ->where(['id' => $reserva->mesa_id])
+            ->where(['id' => $id])
             ->where(['status =' => 1])
             ->first();
 
-
-        if (empty($consultaMesa->num_mesa)) {
-            $consulta = $this->find()
-                ->select(['Reservas.data_reserva','Reservas.status' , 'Mesas.num_mesa'])
-                ->contain(['Mesas'])
-                ->where(['Reservas.data_reserva' => $reserva->data_reserva])
-                ->where(['Mesas.num_mesa =' => $consultaMesa->num_mesa])
-                ->where(['Reservas.status =' => 'Agendado'])
-                ->first();
-
-            if(empty($consulta)){
-                $resultado = true;
-            }else{
-                $resultado = false;
-            }
-
-
-        }else{
-            $consulta = $this->find()
-            ->select(['Reservas.data_reserva', 'Reservas.status'])
-            ->contain(['Mesas'])
-            ->where(['Reservas.data_reserva' => $reserva->data_reserva])
-            ->where(['Reservas.status =' => 'Agendado'])
-            ->first();
-            if(empty($consulta)){
-                $resultado = true;
-            }else{
-                $resultado = false;
-            }
-        }
-
-
-
-        return $resultado;
+        return $consultaMesa;
     }
 }

@@ -28,7 +28,9 @@
                     <div class=" d-flex align-items-stretch flex-column">
                         <div class="card bg-light d-flex flex-fill">
                             <div class="card-header text-muted border-bottom-0">
-                                <b class="text-dark"> Reserva Numero :</b> <?= $reserva->id  ?>
+                                <div class="row">
+                                    <b class="text-dark"> Reserva Numero: <?= $reserva->id  ?></b>
+                                </div>
                             </div>
                             <div class="card-body pt-0">
                                 <div class="row">
@@ -38,18 +40,26 @@
                                         <p class="text-muted text-sm"><b>Cliente :</b><?= $reserva->cliente->nome ?> </p>
                                         <p class="text-muted text-sm"><b>CPF :</b><?= $reserva->cliente->cpf ?> </p>
                                         <p class="text-muted text-sm"><b>Data Nascimento :</b><?= $reserva->cliente->data_nasc ?> </p>
-
+                                        <p class="text-muted text-sm"><b>Mesa :</b><?= $reserva->mesa->num_mesa ?> </p>
+                                        <p class="text-muted text-sm"><b>Quandidade de cadeira :</b><?= $reserva->mesa->num_cadeira ?> </p>
 
                                     </div>
                                     <div class="col-6">
                                         <p class="text-muted text-sm"><b>Data da Reserva :</b><?= $reserva->data_reserva ?> </p>
                                         <p class="text-muted text-sm"><b>Data da Reserva :</b><?= $reserva->status ?> </p>
+                                        <?php if ($reserva->status == 'Finalizado') : ?>
+                                            <p class="text-muted text-sm"><b>Data da Finalização :</b><?= date_format($reserva->modified, "d/m/Y H:m:s") ?> </p>
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="text-right">
-                                    <?= $this->Html->link(__('<i class="fa fa-address-book"></i> Editar Reserva'), ['action' => 'edit', $reserva->id], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
+                                    <?php if ($reserva->status == 'Finalizado') : ?>
+                                        
+                                    <?php else : ?>
+                                        <?= $this->Html->link(__('<i class="fa fa-address-book"></i> Editar Reserva'), ['action' => 'edit', $reserva->id], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         </div>
@@ -59,5 +69,3 @@
         </div>
     </div>
 </section>
-
-

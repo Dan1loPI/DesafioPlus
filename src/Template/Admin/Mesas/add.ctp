@@ -6,7 +6,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><?= $this->Html->link('Listar', ['controller' => 'mesas', 'action' => 'index']) ?></li>
+                    <li class="breadcrumb-item active">Mesas</li>
                     <li class="breadcrumb-item active">Adicionar Mesa</li>
                 </ol>
             </div>

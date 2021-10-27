@@ -70,40 +70,10 @@
     </div>
 </section>
 
-
-
-<!--
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Reserva $reserva
- */
+<?php 
+/*
+foreach($testeMesa as $mesa){
+var_dump($mesa);
+}
+*/
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Reservas'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Clientes'), ['controller' => 'Clientes', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Cliente'), ['controller' => 'Clientes', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Mesas'), ['controller' => 'Mesas', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Mesa'), ['controller' => 'Mesas', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="reservas form large-9 medium-8 columns content">
-    <?= $this->Form->create($reserva) ?>
-    <fieldset>
-        <legend><?= __('Add Reserva') ?></legend>
-        <?php
-        echo $this->Form->control('usuario_id', ['options' => $users]);
-        echo $this->Form->control('cliente_id', ['options' => $clientes]);
-        echo $this->Form->control('mesa_id', ['options' => $mesas]);
-        echo $this->Form->control('data_reserva');
-        echo $this->Form->control('observacao');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
-</div>
--->

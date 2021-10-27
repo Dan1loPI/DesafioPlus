@@ -19,9 +19,6 @@ class ReservasController extends AppController
 
         $this->paginate = [
             'contain' => ['Clientes', 'Mesas'],
-            'conditions' => [
-                'OR' => [['Reservas.status' => 'Em Andamento'], ['Reservas.status' => 'Agendado']]
-            ],
             'order' => ['Reservas.data_reserva' => 'DESC']
 
         ];
@@ -42,16 +39,13 @@ class ReservasController extends AppController
 
     public function add()
     {
-
         $user = TableRegistry::getTableLocator()->get('users');
-
         $perfilUser = $user->getUserDados($this->Auth->user('id'));
 
         $reserva = $this->Reservas->newEntity();
         if ($this->request->is('post')) {
             $reserva = $this->Reservas->patchEntity($reserva, $this->request->getData());
             $reserva->usuario_id = $perfilUser->id;
-
             if ($this->Reservas->checarMesa($reserva)) {
                 if ($this->Reservas->save($reserva)) {
                     $this->Flash->success(__('Reserva agendada com sucesso!'));
@@ -67,11 +61,12 @@ class ReservasController extends AppController
         $clientes = $this->Reservas->Clientes->find('list', [
             'order' => ['nome' => 'ASC']
         ]);
+      
         $mesas = $this->Reservas->Mesas->find('list', [
             'conditions' => ['status =' => 1],
             'limit' => 50,
         ]);
-
+        
         $this->set(compact('reserva', 'clientes', 'mesas'));
     }
 
@@ -100,9 +95,7 @@ class ReservasController extends AppController
                 $reserva->status = 'Cancelado';
             }
 
-            $alteraMesa = $this->Reservas->alteraStatus($reserva->mesa_id, $reserva->status);
-
-            $this->Mesas->save($alteraMesa);
+          
 
             if ($this->Reservas->save($reserva)) {
                 $this->Flash->success(__('Reserva alterada com sucesso'));

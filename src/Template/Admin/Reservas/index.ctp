@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1><i class="fa fa-address-book"></i> Reservas</h1>
+                <h1><i class="fa fa-address-book"></i> Reservas</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -18,23 +18,29 @@
         <div class="col-md-12">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title col-12">
-                        <i class="fa fa-list" aria-hidden="true"></i>
-                        Lista de reservas cadastrados
-                        <div class="float-sm-right ">
-                            <?= $this->Html->link('<i class="fa fa-address-book"></i> Adicionar',['controller' => 'reservas', 'action' => 'add'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
-                        </div>
-                    </h3>
+                    <div class="row">
+                        <h3 class="card-title col-12">
+                            <i class="fa fa-list" aria-hidden="true"></i>
+                            Lista de reservas cadastrados
+                            <div class="float-sm-right ">
+                                <?= $this->Html->link('<i class="fa fa-address-book"></i> Adicionar', ['controller' => 'reservas', 'action' => 'add'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
+                            </div>
+                        </h3>
+                    </div>
+                    <div class="row ">
+                        teste
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th><?= $this->Paginator->sort('ID') ?></th>
-                                <th><?= $this->Paginator->sort('CLIENTE') ?></th>
-                                <th><?= $this->Paginator->sort('MESA') ?></th>
-                                <th><?= $this->Paginator->sort('DATA DA RESERVA') ?></th>
-                                <th><?= $this->Paginator->sort('OBSERVAÇÃO') ?></th>
+                                <th><?= __('ID') ?></th>
+                                <th><?= __('CLIENTE') ?></th>
+                                <th><?= __('Nº MESA') ?></th>
+                                <th class="text-center"><?= __('DATA DA RESERVA') ?></th>
+                                <th><?= __('OBSERVAÇÕES') ?></th>
                                 <th><?= $this->Paginator->sort('STATUS') ?></th>
                                 <th class="actions"><?= __('OPÇÕES') ?></th>
                             </tr>
@@ -42,19 +48,26 @@
                         <tbody>
                             <?php foreach ($reservas as $reserva) : ?>
                                 <tr>
-                                    <td class="text-<?= $reserva->status == 'Finalizado'? 'success': ''; ?>" ><?= $this->Number->format($reserva->id) ?></td>
-                                    <td class="text-<?= $reserva->status == 'Finalizado'? 'success': ''; ?>" ><?= $reserva->has('cliente') ? $this->Html->link($reserva->cliente->nome, ['controller' => 'Clientes', 'action' => 'view', $reserva->cliente->id]) : '' ?></td>
-                                    <td class="text-<?= $reserva->status == 'Finalizado'? 'success': ''; ?>" ><?= $reserva->has('mesa') ? $this->Html->link($reserva->mesa->num_mesa, ['controller' => 'Mesas', 'action' => 'view', $reserva->mesa->id]) : '' ?></td>
-                                    <td class="text-<?= $reserva->status == 'Finalizado'? 'success': ''; ?>" ><?= $reserva->data_reserva ?></td>
-                                    <td class="text-<?= $reserva->status == 'Finalizado'? 'success': ''; ?>" ><?= $reserva->observacao ?></td>
-                                    <td class="text-<?= $reserva->status == 'Finalizado'? 'success': ''; ?>" ><?= $reserva->status ?></td>
+                                    <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $this->Number->format($reserva->id) ?></td>
+                                    <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->has('cliente') ? $this->Html->link($reserva->cliente->nome, ['controller' => 'Clientes', 'action' => 'view', $reserva->cliente->id]) : '' ?></td>
+                                    <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->has('mesa') ? $this->Html->link('Nº ' . $reserva->mesa->num_mesa, ['controller' => 'Mesas', 'action' => 'view', $reserva->mesa->id]) : '' ?></td>
+                                    <td class="text-center text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->data_reserva ?></td>
+                                    <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->observacao ?></td>
+                                    <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->status ?></td>
                                     <td class="text-center py-0 align-middle col-sm-1">
                                         <div class="btn-group btn-group-sm">
                                             <?= $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'reservas', 'action' => 'view', $reserva->id], ['class' => 'btn btn-outline-info', 'escape' => false]) ?>
-                                            <?= $this->Html->link(__('<i class="fas fa-edit"></i>'), ['controller' => 'reservas', 'action' => 'edit', $reserva->id], ['class' => 'btn btn-outline-dark btn-sm', 'escape' => false]) ?>
-                                            <?= $this->Html->link('<i class="fa fa-check"></i>', ['controller' => 'reservas', 'action' => 'finalizar', $reserva->id],
-                                             ['class' => 'btn btn-outline-success btn-sm', 'escape' => false, 'confirm' => __('Deseja Finalizar esta reserva {0}?', $reserva->id)]
-                                             ) ?>
+
+                                            <?php if ($reserva->status == 'Agendado') : ?>
+                                                <?= $this->Html->link(__('<i class="fas fa-edit"></i>'), ['controller' => 'reservas', 'action' => 'edit', $reserva->id], ['class' => 'btn btn-outline-dark btn-sm', 'escape' => false]) ?>
+                                                <?= $this->Html->link(
+                                                    '<i class="fa fa-check"></i>',
+                                                    ['controller' => 'reservas', 'action' => 'finalizar', $reserva->id],
+                                                    ['class' => 'btn btn-outline-success btn-sm', 'escape' => false, 'confirm' => __('Deseja Finalizar esta reserva {0}?', $reserva->id)]
+                                                ) ?>
+                                            <?php endif ?>
+
+
                                         </div>
                                     </td>
                                 </tr>
