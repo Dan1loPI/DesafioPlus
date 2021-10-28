@@ -64,7 +64,7 @@ class UsersTable extends Table
         $validator
             ->allowEmptyString('confirma_senha', 'create')
             ->notEmptyString('confirma_senha', 'Confirme sua senha')
-            ->requirePresence('confirma_senha', 'update')
+            
             ->minLength('confirma_senha', 6, 'A senha deve ter no mínimo 6 caracteres!');
 
 

@@ -80,4 +80,14 @@ class ContatosTableTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test buscaContatos method
+     *
+     * @return void
+     */
+    public function testBuscaContatos()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

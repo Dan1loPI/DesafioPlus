@@ -42,20 +42,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Senha</label>
-                                <?= $this->Form->control('password', ['class' => 'form-control', 'label' => false, 'value' => '']) ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Confirmar sua senha</label>
-                                <?= $this->Form->control('confirma_senha', ['class' => 'form-control', 'label' => false, 'type' => 'password']) ?>
-                            </div>
-                        </div>
-                    </div>
+                  
                 </div>
                 <?= $this->Flash->render(); ?>
                 <div class="card-footer">

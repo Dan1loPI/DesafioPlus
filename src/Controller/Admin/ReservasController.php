@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\I18n\Date;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\FrozenTime;
 use DateTime;
@@ -46,27 +47,36 @@ class ReservasController extends AppController
         if ($this->request->is('post')) {
             $reserva = $this->Reservas->patchEntity($reserva, $this->request->getData());
             $reserva->usuario_id = $perfilUser->id;
-            if ($this->Reservas->checarMesa($reserva)) {
-                if ($this->Reservas->save($reserva)) {
-                    $this->Flash->success(__('Reserva agendada com sucesso!'));
-                    return $this->redirect(['action' => 'index']);
-                }
-                $this->Flash->error(__('Não foi possivel agendar sua reserva!'));
+
+            $time = Date::now();
+
+            if ($reserva->data_reserva < $time) {
+                $this->Flash->error(__('Data anterior não permitida'));
             } else {
 
-                $this->Flash->error(__('Mesa ocupada ou indispónivel no momento'));
+                if ($this->Reservas->checarMesa($reserva)) {
+                    if ($this->Reservas->save($reserva)) {
+                        $this->Flash->success(__('Reserva agendada com sucesso!'));
+                        return $this->redirect(['action' => 'index']);
+                    }
+                    $this->Flash->error(__('Não foi possivel agendar sua reserva!'));
+                } else {
+
+                    $this->Flash->error(__('Mesa ocupada ou indispónivel no momento'));
+                }
             }
         }
 
         $clientes = $this->Reservas->Clientes->find('list', [
+            'conditions' => ['status =' => 'Ativo'],
             'order' => ['nome' => 'ASC']
         ]);
-      
+
         $mesas = $this->Reservas->Mesas->find('list', [
             'conditions' => ['status =' => 1],
             'limit' => 50,
         ]);
-        
+
         $this->set(compact('reserva', 'clientes', 'mesas'));
     }
 
@@ -95,7 +105,7 @@ class ReservasController extends AppController
                 $reserva->status = 'Cancelado';
             }
 
-          
+
 
             if ($this->Reservas->save($reserva)) {
                 $this->Flash->success(__('Reserva alterada com sucesso'));

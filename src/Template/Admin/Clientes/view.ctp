@@ -72,25 +72,15 @@
                                 <tr>
                                     <th scope="col"><?= __('NÚMERO') ?></th>
                                     <th scope="col"><?= __('PRICIPAL') ?></th>
-                                    <th scope="col"><?= __('OPÇÕES') ?></th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <?php foreach ($cliente->contatos as $contato) : ?>
                                     <tr>
                                         <td><?= $contato->numero ?></td>
                                         <td class="text-center  <?= $contato->principal  == 1 ? 'text-success' : '' ?> ">
                                             <h4><?= $contato->principal  == 1 ?  '<i class="fas fa-check-square"></i>'  : '' ?></h4>
-                                        </td>
-                                        <td class="text-center py-0 align-middle col-sm-1">
-                                            <div class="btn-group btn-group-sm">
-                                                <?= $this->Form->postLink(
-                                                    __('<i class="fas fa-trash-alt"></i>'),
-                                                    ['controller' => 'clientes', 'action' => 'deleteContato', $contato->id],
-                                                    ['class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'confirm' => __('Deseja remover este contato?', $contato->id)]
-                                                ) ?>
-                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -102,7 +92,6 @@
             </div>
         <?php endif; ?>
     </div>
-
     <?php if (!empty($cliente->enderecos)) : ?>
         <div class="col-12">
             <div class="card card-default">
@@ -123,7 +112,7 @@
                                 <th scope="col"><?= __('CEP') ?></th>
                                 <th scope="col"><?= __('CIDADE') ?></th>
                                 <th scope="col"><?= __('ESTADO') ?></th>
-                                <th scope="col"><?= __('OPÇÕES') ?></th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -137,15 +126,7 @@
                                     <td><?= $endereco->cep ?></td>
                                     <td><?= $endereco->cidade->nome_cidade ?></td>
                                     <td><?= $endereco->cidade->estado->nome_estado ?></td>
-                                    <td class="text-center py-0 align-middle col-sm-1">
-                                            <div class="btn-group btn-group-sm">
-                                                <?= $this->Form->postLink(
-                                                    __('<i class="fas fa-trash-alt"></i>'),
-                                                    ['controller' => 'clientes', 'action' => 'deleteContato', $endereco->id],
-                                                    ['class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'confirm' => __('Deseja remover este contato?', $endereco->id)]
-                                                ) ?>
-                                            </div>
-                                        </td>
+                                   
                                 </tr>
                             <?php endforeach; ?>
 

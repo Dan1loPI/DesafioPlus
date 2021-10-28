@@ -19,7 +19,7 @@
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <i class="fa fa-table" aria-hidden="true"></i>
                         Informações sobre a mesa
                     </h3>
                 </div>
@@ -66,7 +66,7 @@
     <div class="card card-default">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fa fa-user" aria-hidden="true"></i>
+                <i class="fa fa-table" aria-hidden="true"></i>
                 Informações sobre reservas da mesa
             </h3>
         </div>
@@ -83,7 +83,6 @@
                 </thead>
                 <tbody>
                     <?php foreach ($mesa->reservas as $reservas) : ?>
-                
                         <tr>
                             <td><?= $reservas->id ?></td>
                             <td><?= $reservas->user->nome ?></td>

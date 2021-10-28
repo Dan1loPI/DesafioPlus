@@ -66,9 +66,13 @@
                                 <?= $this->Form->control('cidade_id', ['class' => 'form-control', 'label' => false],['options' => $cidades]) ?>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <label>Estado</label>
+                            <div class="row">
+                                <?= $this->Form->control('estado_id', ['class' => 'form-control ml-3', 'label' => false],['options' => $estados]) ?>
+                            </div>
+                        </div>
 
-                        
-                      
                     </div>
                     <div class="card-footer">
                             <div class="text-right">

@@ -14,7 +14,7 @@ class UsersController extends AppController
         $usuariosAtivos = TableRegistry::getTableLocator()->get('users');
         $this->paginate = [
             'conditions' => ['users.status = ' => 1],
-            'limit' => 5
+            'limit' => 8
         ];
 
         $usuarios = $this->paginate($usuariosAtivos);
@@ -74,25 +74,21 @@ class UsersController extends AppController
             $usuario = $this->Users->patchEntity($usuario, $this->request->getData()); //Recebe os dados vindo do usuário!
 
             if ($usuario->getErrors()) {
-                $this->Flash->error('Campos incorretos');
+                $this->Flash->error('Campos incorretos.');
             } else {
-
-
-                if ($usuario->ConfirmaSenha()) {
-                    if ($this->Users->save($usuario)) {
-                        $this->Flash->success('Usuário salvo com sucesso!');
-                        return $this->redirect(['controller' => 'Users', 'action' => 'index']);
-                    } else {
-                        $this->Flash->error('Erro ao adicionar usuário. Tente novamente!');
-                    }
+                if ($this->Users->save($usuario)) {
+                    $this->Flash->success('Usuário salvo com sucesso!');
+                    return $this->redirect(['controller' => 'Users', 'action' => 'index']);
                 } else {
-                    $this->Flash->error('As senhas não conferem!');
+                    $this->Flash->error('Erro ao editar usuário. Tente novamente!');
                 }
             }
         }
 
         $this->set(compact('usuario'));
     }
+
+
 
     public function alterarFotoPerfil()
     {
@@ -133,13 +129,12 @@ class UsersController extends AppController
         $user = $this->Users->get($id);
         $user->status = 0;
 
-        if($this->Users->save($user)){
+        if ($this->Users->save($user)) {
             $this->Flash->success('Usuários inativado com sucesso');
             return $this->redirect(['action' => 'index']);
-        }else{
+        } else {
             $this->Flash->error('Erro ao inativar este usuário');
         }
-
     }
 
     public function login()
