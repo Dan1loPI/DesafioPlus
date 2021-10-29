@@ -18,20 +18,34 @@
         <div class="col-md-12">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title col-12">
-                        <i class="fa fa-list" aria-hidden="true"></i>
-                        Lista de usuários cadastrados
-                        <div class="float-sm-right ">
-                            <?= $this->Html->link('<i class="fas fa-user"></i> Adicionar',['controller' => 'users', 'action' => 'add'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
+                    <div class="row">
+                        <h3 class="card-title col-12">
+                            <i class="fa fa-list" aria-hidden="true"></i>
+                            Lista de usuários cadastrados
+                            <div class="float-sm-right ">
+                                <?= $this->Html->link('<i class="fas fa-user"></i> Adicionar', ['controller' => 'users', 'action' => 'add'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
+                            </div>
+                        </h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <?= $this->Form->select('teste', ['FILTRAR POR','ID', 'NOME', 'EMAL', 'STATUS'],['class' => 'form-control', 'label' => false, 'placeholder' => 'Filtrar por' ]) ?>
                         </div>
-                    </h3>
+                        <div class="col-md-5">
+                            <?= $this->Form->control('search', ['class' => 'form-control ', 'placeholder' => 'Digite o que deseja buscar' , 'label' => false]) ?>
+                        </div>
+                        <div class="col-md-4">
+                        <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Procurar',['escape' => false]) ?>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th><?= $this->Paginator->sort('ID') ?></th>
-                                <th><?= $this->Paginator->sort('NOME') ?></th> 
+                                <th><?= $this->Paginator->sort('NOME') ?></th>
                                 <th><?= $this->Paginator->sort('EMAIL') ?></th>
                                 <th><?= $this->Paginator->sort('STATUS') ?></th>
                                 <th><?= __('Opções') ?></th>
@@ -44,7 +58,7 @@
                                     <td><?= $this->Number->format($usuario->id) ?></td>
                                     <td><?= $usuario->nome ?></td>
                                     <td><?= $usuario->email ?></td>
-                                    <td><?= $usuario->status == 1? 'Ativo' : 'Inativo' ?></td>
+                                    <td><?= $usuario->status == 1 ? 'Ativo' : 'Inativo' ?></td>
                                     <td class="text-center py-0 align-middle col-sm-1">
                                         <div class="btn-group btn-group-sm">
                                             <?= $this->Html->link('<i class="fas fa-eye"></i>', ['controller' => 'Users', 'action' => 'view', $usuario->id], ['class' => 'btn btn-outline-info', 'escape' => false]) ?>
@@ -59,7 +73,7 @@
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
-                    </table> 
+                    </table>
                 </div>
                 <?= $this->element('pagination'); ?>
             </div>

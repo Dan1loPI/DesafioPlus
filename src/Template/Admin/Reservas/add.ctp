@@ -69,11 +69,3 @@
         </div>
     </div>
 </section>
-
-<?php 
-/*
-foreach($testeMesa as $mesa){
-var_dump($mesa);
-}
-*/
-?>

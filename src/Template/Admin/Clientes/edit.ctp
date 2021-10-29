@@ -16,7 +16,7 @@
 
 <section class="content">
     <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9">
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">

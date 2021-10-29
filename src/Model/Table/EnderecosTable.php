@@ -73,4 +73,11 @@ class EnderecosTable extends Table
 
         return $rules;
     }
+
+    public function buscaEnderecos($id)
+    {
+        $query = $this->find()
+            ->where(['cliente_id =' => $id]);
+        return $query;
+    }
 }

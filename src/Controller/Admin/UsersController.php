@@ -13,7 +13,6 @@ class UsersController extends AppController
     {
         $usuariosAtivos = TableRegistry::getTableLocator()->get('users');
         $this->paginate = [
-            'conditions' => ['users.status = ' => 1],
             'limit' => 8
         ];
 

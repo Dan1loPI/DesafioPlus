@@ -85,5 +85,56 @@
             </div>
         </div>
     </div>
+  
+        <div class="col-12">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-address-book" aria-hidden="true"></i>
+                        Endereços
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"><?= __('ENDEREÇO') ?></th>
+                                <th scope="col"><?= __('NÚMERO') ?></th>
+                                <th scope="col"><?= __('COMPLEMENTO') ?></th>
+                                <th scope="col"><?= __('BAIRRO') ?></th>
+                                <th scope="col"><?= __('CEP') ?></th>
+                                <th scope="col"><?= __('CIDADE') ?></th>
+                                <th scope="col"><?= __('ESTADO') ?></th>
+                                <th scope="col"><?= __('OPÇOES') ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <?php foreach ($enderecosCliente as $endereco) : ?>
+                                <tr>
+                                   
+                                    <td><?= $endereco->lagradouro?></td>
+                                    <td><?= $endereco->numero ?></td>
+                                    <td><?= $endereco->complemento ?></td>
+                                    <td><?= $endereco->bairro ?></td>
+                                    <td><?= $endereco->cep ?></td>
+                                    <td><?= $endereco->cidade_id ?></td>
+                                    <td><?= $endereco->estado_id ?></td>
+                                    <td class="text-center">
+                                    <?= $this->Form->postLink(
+                                                __('<i class="fas fa-trash-alt"></i>'),
+                                                ['controller' => 'clientes', 'action' => 'deleteEndereco', $endereco->id],
+                                                ['class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'confirm' => __('Deseja remover este endereço?', $endereco->id)]
+                                            ) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    
 </section>
 

@@ -11,8 +11,12 @@ class ClientesController extends AppController
 
     public function index()
     {
+        //$email = $this->request->query();
+
+        //var_dump($email);
+
         $this->paginate = [
-            'order' => ['nome' => 'ASC'],
+            'order' => ['id' => 'DESC'],
             'limit' => 10,
         ];
 
@@ -71,7 +75,8 @@ class ClientesController extends AppController
         }
         $cidades = $this->Cidades->find('list', ['limit' => 20000]);
         $estados = $this->Estados->find('list', ['limit' => 30]);
-        $this->set(compact('endereco', 'cidades', 'estados'));
+        $enderecosCliente = $this->Enderecos->buscaEnderecos($id);
+        $this->set(compact('endereco', 'cidades', 'estados', 'enderecosCliente'));
     }
 
     public function contato($id = null)
@@ -160,21 +165,14 @@ class ClientesController extends AppController
 
     public function alteraContatoPrincipal($id = null)
     {
-
         $this->loadModel('Contatos');
-
         $contato = $this->Contatos->get($id);
         $contato->principal = 1;
-
         $contatoAnterior = $this->Contatos->desativarAnterior();
-
-    
-       
         if($contatoAnterior){
             $contatoAnterior->principal = 0;
             $this->Contatos->save($contatoAnterior);
         }
-        
         if ($this->Contatos->save($contato)) {
             $this->Flash->success('Status alterado com sucesso!');
 
@@ -184,5 +182,22 @@ class ClientesController extends AppController
             return $this->redirect(['action' => 'index']);
         }
     
+    }
+
+
+    public function deleteEndereco($id = null)
+    {
+        $this->loadModel('Enderecos');
+
+        $this->request->allowMethod(['post', 'delete']);
+        $endereco = $this->Enderecos->get($id);
+
+
+        if ($this->Enderecos->delete($endereco)) {
+            $this->Flash->success('removido com sucesso');
+            return $this->redirect(['controller' => 'clientes', 'action' => 'endereco', $endereco->cliente_id]);
+        } else {
+            $this->Flash->error(__('Erro ao remover endereco!'));
+        }
     }
 }
