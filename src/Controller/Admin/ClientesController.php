@@ -11,19 +11,17 @@ class ClientesController extends AppController
 
     public function index()
     {
-
         $clientesTable = TableRegistry::getTableLocator()->get('clientes');
+
         $this->paginate = [
-            'order' => ['id' => 'DESC'],
-            'limit' => 10,
+            'order' => ['nome' => 'ASC'],
+            'limit' => 7,
         ];
 
-        $pesquisa = $this->request->getQuery('pesquisa');
+        $pesquisa =  $this->request->getQuery('pesquisa');
         $coluna = $this->request->getQuery('coluna');
+       
 
-        var_dump($pesquisa);
-
-        /*
         switch ($coluna) {
             case '0':
                 $coluna = 'nome';
@@ -32,26 +30,19 @@ class ClientesController extends AppController
                 $coluna = 'cpf';
                 break;
 
-            case '2':
-                $coluna = 'status';
-                break;
-
             default:
                 $coluna = 'nome';
                 break;
         }
 
-        
-
-        
         if($pesquisa == null){
-
+            
         }else{
             $clientesTable = $this->Clientes->find()
-                ->where([$coluna. ' LIKE' => "%$pesquisa%"]);
+                ->where([$coluna . ' LIKE' => "%$pesquisa%"]);
         }
-        */
 
+     
         $clientes = $this->paginate($clientesTable);
 
         $this->set(compact('clientes'));
