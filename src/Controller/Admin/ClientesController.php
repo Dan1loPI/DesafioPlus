@@ -11,16 +11,48 @@ class ClientesController extends AppController
 
     public function index()
     {
-        //$email = $this->request->query();
 
-        //var_dump($email);
-
+        $clientesTable = TableRegistry::getTableLocator()->get('clientes');
         $this->paginate = [
             'order' => ['id' => 'DESC'],
             'limit' => 10,
         ];
 
-        $clientes = $this->paginate($this->Clientes);
+        $pesquisa = $this->request->getQuery('pesquisa');
+        $coluna = $this->request->getQuery('coluna');
+
+        var_dump($pesquisa);
+
+        /*
+        switch ($coluna) {
+            case '0':
+                $coluna = 'nome';
+                break;
+            case '1':
+                $coluna = 'cpf';
+                break;
+
+            case '2':
+                $coluna = 'status';
+                break;
+
+            default:
+                $coluna = 'nome';
+                break;
+        }
+
+        
+
+        
+        if($pesquisa == null){
+
+        }else{
+            $clientesTable = $this->Clientes->find()
+                ->where([$coluna. ' LIKE' => "%$pesquisa%"]);
+        }
+        */
+
+        $clientes = $this->paginate($clientesTable);
 
         $this->set(compact('clientes'));
     }
@@ -67,10 +99,10 @@ class ClientesController extends AppController
 
             if ($this->Enderecos->save($endereco)) {
                 $this->Flash->success('Endereço adicionado com sucesso');
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'clientes', 'action' => 'endereco', $endereco->cliente_id]);
             } else {
                 $this->Flash->error('Endereço não foi salvo');
+                return $this->redirect(['controller' => 'clientes', 'action' => 'endereco', $endereco->cliente_id]);
             }
         }
         $cidades = $this->Cidades->find('list', ['limit' => 20000]);
@@ -95,7 +127,7 @@ class ClientesController extends AppController
 
                 return $this->redirect(['controller' => 'clientes', 'action' => 'contato', $id]);
             } else {
-                
+
                 $this->Flash->error('Contato não foi salvo!');
             }
         }
@@ -141,7 +173,7 @@ class ClientesController extends AppController
 
 
         if ($this->Contatos->delete($contato)) {
-            $this->Flash->success('removido com sucesso');
+            $this->Flash->success('Contato removido com sucesso');
             return $this->redirect(['controller' => 'clientes', 'action' => 'contato', $contato->cliente_id]);
         } else {
             $this->Flash->error(__('Erro ao remover contato!'));
@@ -169,19 +201,18 @@ class ClientesController extends AppController
         $contato = $this->Contatos->get($id);
         $contato->principal = 1;
         $contatoAnterior = $this->Contatos->desativarAnterior();
-        if($contatoAnterior){
+        if ($contatoAnterior) {
             $contatoAnterior->principal = 0;
             $this->Contatos->save($contatoAnterior);
         }
         if ($this->Contatos->save($contato)) {
             $this->Flash->success('Status alterado com sucesso!');
 
-            return $this->redirect(['controller' => 'clientes','action' => 'contato', $contato->cliente_id]);
+            return $this->redirect(['controller' => 'clientes', 'action' => 'contato', $contato->cliente_id]);
         } else {
             $this->Flash->error('Erro ao alterar status!');
             return $this->redirect(['action' => 'index']);
         }
-    
     }
 
 
@@ -194,10 +225,10 @@ class ClientesController extends AppController
 
 
         if ($this->Enderecos->delete($endereco)) {
-            $this->Flash->success('removido com sucesso');
+            $this->Flash->success('Endereço removido com sucesso');
             return $this->redirect(['controller' => 'clientes', 'action' => 'endereco', $endereco->cliente_id]);
         } else {
-            $this->Flash->error(__('Erro ao remover endereco!'));
+            $this->Flash->error(__('Erro ao remover endereço!'));
         }
     }
 }

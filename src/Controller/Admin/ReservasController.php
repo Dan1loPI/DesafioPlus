@@ -15,15 +15,46 @@ class ReservasController extends AppController
     public function index()
     {
 
+
         $date = new FrozenTime();
         $date->setToStringFormat('dd/MM/yyyy HH:mm:ss');
 
+        $reservasTable = TableRegistry::getTableLocator()->get('reservas');
+        
         $this->paginate = [
             'contain' => ['Clientes', 'Mesas'],
-            'order' => ['Reservas.data_reserva' => 'DESC']
+            'order' => ['Reservas.data_reserva' => 'DESC'],
+            'limit' => 7
 
         ];
-        $reservas = $this->paginate($this->Reservas);
+
+        $pesquisa = $this->request->getQuery('pesquisa');
+        $coluna = $this->request->getQuery('coluna');
+
+        switch ($coluna) {
+            case '0':
+                $coluna = 'Clientes.nome';
+                break;
+            case '1':
+                $coluna = 'Mesas.num_mesa';
+                break;
+
+            case '2':
+                $coluna = 'Reservas.status';
+                break;
+
+            default:
+                $coluna = 'Clientes.nome';
+                break;
+        }
+
+        if ($pesquisa == null) {
+        } else {
+            $reservasTable = $this->Reservas->find()
+                ->where([$coluna . ' LIKE' => "%$pesquisa%"]);
+        }
+
+        $reservas = $this->paginate($reservasTable);
 
         $this->set(compact('reservas'));
     }
@@ -105,15 +136,22 @@ class ReservasController extends AppController
                 $reserva->status = 'Cancelado';
             }
 
+            $time = Date::now();
 
-
-            if ($this->Reservas->save($reserva)) {
-                $this->Flash->success(__('Reserva alterada com sucesso'));
-                return $this->redirect(['action' => 'index']);
+            if ($reserva->data_reserva < $time) {
+                $this->Flash->error(__('Data anterior não permitida'));
+            } else {
+                if ($this->Reservas->checarMesa($reserva)) {
+                    if ($this->Reservas->save($reserva)) {
+                        $this->Flash->success(__('Reserva alterada com sucesso'));
+                        return $this->redirect(['action' => 'index']);
+                    }
+                    $this->Flash->error(__('Reserva não alterada!'));
+                } else {
+                    $this->Flash->error(__('Mesa ocupada ou indispónivel no momento'));
+                }
             }
-            $this->Flash->error(__('Reserva não alterada!'));
         }
-
 
 
         $clientes = $this->Reservas->Clientes->find('list', ['limit' => 200]);

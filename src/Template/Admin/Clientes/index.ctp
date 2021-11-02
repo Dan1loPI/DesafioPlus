@@ -25,6 +25,15 @@
                             <?= $this->Html->link('<i class="fas fa-user"></i> Adicionar',['controller' => 'clientes', 'action' => 'add'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
                         </div>
                     </h3>
+                    <div class="row ">
+                        <?= $this->Form->create(null,['type' => 'get']) ?>
+                       <div class="row">
+                        <?= $this->Form->select('coluna', ['NOME', 'CPF', 'STATUS'], ['class' => 'form-control col-3']); ?>
+                            <?= $this->Form->control('pequisa', ['class' => 'form-control', 'placeholder' => 'Digite o que deseja buscar', 'label' => false]) ?>
+                            <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> ', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
+                            </div>
+                        <?= $this->Form->end() ?>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover">

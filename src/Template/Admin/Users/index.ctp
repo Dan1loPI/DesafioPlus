@@ -27,17 +27,16 @@
                             </div>
                         </h3>
                     </div>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <?= $this->Form->select('teste', ['FILTRAR POR','ID', 'NOME', 'EMAL', 'STATUS'],['class' => 'form-control', 'label' => false, 'placeholder' => 'Filtrar por' ]) ?>
-                        </div>
-                        <div class="col-md-5">
-                            <?= $this->Form->control('search', ['class' => 'form-control ', 'placeholder' => 'Digite o que deseja buscar' , 'label' => false]) ?>
-                        </div>
-                        <div class="col-md-4">
-                        <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Procurar',['escape' => false]) ?>
-                        </div>
+                    <div class="row ">
+                        <?= $this->Form->create($teste = null,['type' => 'get']) ?>
+                       <div class="row">
+                        <?= $this->Form->select('coluna', ['NOME', 'EMAIL'], ['class' => 'form-control col-2']); ?>
+                            <?= $this->Form->control('teste', ['class' => 'form-control', 'placeholder' => 'Digite o que deseja buscar', 'label' => false]) ?>
+                            <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Pesquisar', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
+                            </div>
+                        <?= $this->Form->end() ?>
                     </div>
+
                 </div>
 
                 <div class="card-body">

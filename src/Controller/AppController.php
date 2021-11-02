@@ -54,6 +54,7 @@ class AppController extends Controller
                     $this->set(compact('perfilUser'));
 
                     $this->viewBuilder()->setLayout('admin');
+                    
                 }
             }
     }

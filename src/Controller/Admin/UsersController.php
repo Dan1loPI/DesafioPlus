@@ -11,13 +11,37 @@ class UsersController extends AppController
 
     public function index()
     {
+
         $usuariosAtivos = TableRegistry::getTableLocator()->get('users');
         $this->paginate = [
             'limit' => 8
         ];
+        $teste = $this->request->getQuery('teste');
+
+        $coluna = $this->request->getQuery('coluna');
+
+        switch ($coluna) {
+            case '0':
+                $coluna = 'nome';
+                break;
+            case '1':
+                $coluna = 'email';
+                break;
+
+            default:
+                $coluna = 'nome';
+                break;
+        }
+
+        if($teste == null){
+        
+        }else{
+            $usuariosAtivos = $this->Users->find()
+            ->where([$coluna . ' LIKE' => "%$teste%"]);
+        }
+
 
         $usuarios = $this->paginate($usuariosAtivos);
-
         $this->set(compact('usuarios'));
     }
 

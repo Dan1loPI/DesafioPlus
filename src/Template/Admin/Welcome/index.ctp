@@ -18,13 +18,62 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex p-0">
-                    <h3 class="card-title p-3">Tabs</h3>
-                </div>
                 <div class="card-body">
                     <div class="tab-content">
-                       
-                      
+                        <div class="row">
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-purple">
+                                    <div class="inner">
+                                        <h3>Clientes</h3>
+
+                                        <p>New Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <?= $this->Html->link('<i class="fas fa-arrow-circle-right"></i> Listar', ['controller' => 'clientes', 'action' => 'index'], ['escape' => false,  'class' => 'small-box-footer']) ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h3>Mesas</h3>
+
+                                        <p>New Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-table"></i>
+                                    </div>
+                                    <?= $this->Html->link('<i class="fas fa-arrow-circle-right"></i> Listar', ['controller' => 'mesas', 'action' => 'index'], ['escape' => false,  'class' => 'small-box-footer']) ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-orange">
+                                    <div class="inner">
+                                        <h3>Reservas</h3>
+
+                                        <p>New Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-address-book"></i>
+                                    </div>
+                                    <?= $this->Html->link('<i class="fas fa-arrow-circle-right"></i> Listar', ['controller' => 'reservas', 'action' => 'index'], ['escape' => false,  'class' => 'small-box-footer']) ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-info">
+                                    <div class="inner">
+                                        <h3>Relatorios</h3>
+
+                                        <p>New Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-cogs"></i>
+                                    </div>
+                                    <?= $this->Html->link('<i class="fas fa-arrow-circle-right"></i> Listar', ['controller' => 'relatorios', 'action' => 'index'], ['escape' => false,  'class' => 'small-box-footer']) ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

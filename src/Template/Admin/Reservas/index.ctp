@@ -27,7 +27,15 @@
                             </div>
                         </h3>
                     </div>
-                  
+                    <div class="row ">
+                        <?= $this->Form->create($pesquisa = null,['type' => 'get']) ?>
+                       <div class="row">
+                        <?= $this->Form->select('coluna', ['CLIENTE', 'Nº MESA', 'STATUS'], ['class' => 'form-control col-3']); ?>
+                            <?= $this->Form->control('pesquisa', ['class' => 'form-control', 'placeholder' => 'Digite o que deseja buscar', 'label' => false]) ?>
+                            <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Pesquisar', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
+                            </div>
+                        <?= $this->Form->end() ?>
+                    </div>
                 </div>
 
                 <div class="card-body">
