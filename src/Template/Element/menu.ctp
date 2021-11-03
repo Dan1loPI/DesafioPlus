@@ -80,7 +80,7 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                    <li class="nav-item">
+                        <li class="nav-item">
                             <?= $this->Html->link('<i class="fa fa-plus" aria-hidden="true"></i> <p>Adicionar</p>', ['controller' => 'mesas', 'action' => 'add'], ['escape' => false,  'class' => 'nav-link']) ?>
                         </li>
                         <li class="nav-item">
@@ -105,7 +105,21 @@
                         </li>
                     </ul>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-address-book" aria-hidden="true"></i>
+                        <p>
+                            Relatórios
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <?= $this->Html->link('<i class="far fa-list-alt nav-icon"></i> <p>Listar</p>', ['controller' => 'relatorios', 'action' => 'index'], ['escape' => false,  'class' => 'nav-link']) ?>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <?= $this->Html->link('<i class="fas fa-sign-out-alt" aria-hidden="true"></i> <p> Sair</p>', ['controller' => 'users', 'action' => 'logout'], ['escape' => false,  'class' => 'nav-link']) ?>
                 </li>

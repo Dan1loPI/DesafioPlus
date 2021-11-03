@@ -61,7 +61,29 @@ class MesasTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['usuario_id'], 'Users'));
-
         return $rules;
+    }
+
+    public function getContaMesas()
+    {
+        $query = $this->find()
+            ->count();
+        return $query;
+    }
+
+    public function getContaMesasAtivas()
+    {
+        $query = $this->find()
+            ->where(['status =' => 1])
+            ->count();
+        return $query;
+    }
+
+    public function getContaMesasInativas()
+    {
+        $query = $this->find()
+            ->where(['status =' => 0])
+            ->count();
+        return $query;
     }
 }

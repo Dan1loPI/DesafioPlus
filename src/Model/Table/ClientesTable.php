@@ -84,4 +84,26 @@ class ClientesTable extends Table
             ->select(['id', 'uf', 'nome_estado']);
         return $query;
     }
+
+    public function getContaClientes()
+    {
+        $query = $this->find()
+            ->count();
+
+        return $query;
+    }
+    public function getContaClientesAtivos()
+    {
+        $query = $this->find()
+            ->where(['status =' => 'Ativo'])
+            ->count();
+        return $query;
+    }
+    public function getContaClientesInativos()
+    {
+        $query = $this->find()
+            ->where(['status =' => 'Inativo'])
+            ->count();
+        return $query;
+    }
 }

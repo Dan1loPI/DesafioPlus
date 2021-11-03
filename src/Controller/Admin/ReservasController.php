@@ -20,13 +20,8 @@ class ReservasController extends AppController
         $date->setToStringFormat('dd/MM/yyyy HH:mm:ss');
 
         $reservasTable = TableRegistry::getTableLocator()->get('reservas');
-        
-        $this->paginate = [
-            'contain' => ['Clientes', 'Mesas'],
-            'order' => ['Reservas.data_reserva' => 'DESC'],
-            'limit' => 7
 
-        ];
+
 
         $pesquisa = $this->request->getQuery('pesquisa');
         $coluna = $this->request->getQuery('coluna');
@@ -49,6 +44,12 @@ class ReservasController extends AppController
         }
 
         if ($pesquisa == null) {
+            $this->paginate = [
+                'contain' => ['Clientes', 'Mesas'],
+                'order' => ['id' => 'DESC'],
+                'limit' => 7
+
+            ];
         } else {
             $reservasTable = $this->Reservas->find()
                 ->where([$coluna . ' LIKE' => "%$pesquisa%"]);
@@ -174,5 +175,17 @@ class ReservasController extends AppController
             $this->Flash->error(__('Erro ao finalizar reserva!'));
             return $this->redirect(['action' => 'index']);
         }
+    }
+
+    public function export()
+    {
+        $this->setResponse($this->getResponse()->withDownload('my-file.xls'));
+
+
+        $data = $this->Reservas->find('all');
+        $_serialize = 'data';
+
+        $this->viewBuilder()->setClassName('CsvView.Csv');
+        $this->set(compact('data', '_serialize'));
     }
 }

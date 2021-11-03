@@ -83,6 +83,7 @@
                 </thead>
                 <tbody>
                     <?php foreach ($mesa->reservas as $reservas) : ?>
+
                         <tr>
                             <td><?= $reservas->id ?></td>
                             <td><?= $reservas->user->nome ?></td>
@@ -94,6 +95,7 @@
                 </tbody>
             </table>
         </div>
+        <?= $this->element('pagination'); ?>
     </div>
 </section>
 

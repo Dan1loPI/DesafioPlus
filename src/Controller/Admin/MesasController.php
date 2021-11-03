@@ -31,10 +31,12 @@ class MesasController extends AppController
         $date->setToStringFormat('dd/MM/yyyy HH:mm:ss');
 
         $mesa = $this->Mesas->get($id, [
-            'contain' => ['Reservas', 'Reservas.Clientes', 'Reservas.Users'],
+            'contain' => ['Reservas', 'Reservas.Clientes', 'Reservas.Users']
         ]);
 
-        $this->set('mesa', $mesa);
+      
+
+        $this->set(compact('mesa'));
     }
 
     public function add()
