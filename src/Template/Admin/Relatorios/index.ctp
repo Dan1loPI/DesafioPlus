@@ -4,12 +4,6 @@
             <div class="col-sm-6">
                 <h1><i class="fas fa-table"></i> Relatórios</h1>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Mesas</li>
-                    <li class="breadcrumb-item active">Lista de Mesas</li>
-                </ol>
-            </div>
         </div>
     </div>
 </section>

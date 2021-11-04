@@ -133,18 +133,20 @@ class ReservasTable extends Table
         return $consultaMesa;
     }
 
-    public function getQtdReservasFinalizadas()
+    public function getQtdReservasFinalizadas($usuario_id)
     {
         $query = $this->find()
             ->where(['status ='=> 'Finalizado' ])
+            ->where(['usuario_id =' => $usuario_id])
             ->count();
             return $query;
     }
 
-    public function getQtdReservasCanceladas()
+    public function getQtdReservasCanceladas($usuario_id)
     {
         $query = $this->find()
         ->where(['status ='=> 'Cancelado' ])
+        ->where(['usuario_id =' => $usuario_id])
         ->count();
         return $query;
     }

@@ -2,12 +2,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1><i class="fas fa-table"></i>Relatórios de Clientes</h1>
+                <h1><i class="fas fa-table"></i> Relatórios de Clientes</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Mesas</li>
-                    <li class="breadcrumb-item active">Lista de Mesas</li>
+                    <li class="breadcrumb-item active">Relatórios</li>
+                    <li class="breadcrumb-item active">Clientes</li>
                 </ol>
             </div>
         </div>

@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 class UsersTable extends Table
 {
@@ -22,6 +23,10 @@ class UsersTable extends Table
 
         $this->hasMany('Mesas', [
             'foreignKey' => 'mesa_id',
+        ]);
+
+        $this->hasMany('Reservas', [
+            'foreignKey' => 'usuario_id',
         ]);
     }
 
@@ -103,6 +108,27 @@ class UsersTable extends Table
         $query = $this->request->query = $this->find()
             ->select(['id', 'nome', 'emal'])
             ->where(['users.status =' => 1]);
+
+        return $query;
+    }
+
+    public function getQtdReservasAgendadas($usuario_id)
+    {
+        $usersTable = TableRegistry::getTableLocator()->get('reservas');
+        $query = $usersTable->find()
+            ->where(['usuario_id =' => $usuario_id])
+            ->count();
+
+        return $query;
+    }
+
+    public function getQtdReservasCanceladas($usuario_id)
+    {
+        $usersTable = TableRegistry::getTableLocator()->get('reservas');
+        $query = $usersTable->find()
+            ->where(['usuario_id =' => $usuario_id])
+            ->where(['status ='=> 'Cancelado'])
+            ->count();
 
         return $query;
     }

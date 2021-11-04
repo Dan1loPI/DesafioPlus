@@ -16,7 +16,7 @@ class UsersController extends AppController
         $this->paginate = [
             'limit' => 8
         ];
-        $teste = $this->request->getQuery('teste');
+        $pesquisa = $this->request->getQuery('teste');
 
         $coluna = $this->request->getQuery('coluna');
 
@@ -33,11 +33,11 @@ class UsersController extends AppController
                 break;
         }
 
-        if($teste == null){
+        if($pesquisa == null){
         
         }else{
             $usuariosAtivos = $this->Users->find()
-            ->where([$coluna . ' LIKE' => "%$teste%"]);
+            ->where([$coluna . ' LIKE' => "%$pesquisa%"]);
         }
 
 

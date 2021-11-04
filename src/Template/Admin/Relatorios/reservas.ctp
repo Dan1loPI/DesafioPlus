@@ -7,7 +7,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active">Relatórios</li>
-                    <li class="breadcrumb-item active">Relatórios de mesas</li>
+                    <li class="breadcrumb-item active">Reservas</li>
                 </ol>
             </div>
         </div>
