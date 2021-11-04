@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Date;
 
 class RelatoriosController extends AppController
 {
@@ -14,24 +15,52 @@ class RelatoriosController extends AppController
 
     public function clientes()
     {
+        $this->loadModel('Clientes');
+
+        $data_inicio = null;
         $clientesTable = TableRegistry::getTableLocator()->get('clientes');
         $qtdClientes = $clientesTable->getContaClientes();
         $qtdClientesAtivos = $clientesTable->getContaClientesAtivos();
         $qtdClientesInativos = $clientesTable->getContaClientesInativos();
 
+        $data_inicio = new Date ($this->request->getQuery('data_inicio'));
+        $data_fim = new Date($this->request->getQuery('data_fim'));
 
-        $this->set(compact('qtdClientes', 'qtdClientesAtivos', 'qtdClientesInativos'));
+        $conditions = [];
+
+        if ($data_inicio && $data_fim) {
+            $conditions[] = [
+                'data_nasc >=' => $data_inicio,
+                'data_nasc <=' => $data_fim,
+            ];
+        }
+
+        $this->paginate = [
+            'conditions' => $conditions
+        ];
+
+        $clientesTable = $this->paginate($this->Clientes);
+        $this->set(compact('qtdClientes', 'qtdClientesAtivos', 'qtdClientesInativos', 'clientesTable'));
     }
 
     public function mesas()
     {
+        $this->loadModel('Mesas');
+        $user = TableRegistry::getTableLocator()->get('users');
+        $perfilUser = $user->getUserDados($this->Auth->user('id'));
         $mesasTable = TableRegistry::getTableLocator()->get('mesas');
         $qtdMesas = $mesasTable->getContaMesas();
         $qtdMesasAtivas = $mesasTable->getContaMesasAtivas();
         $qtdMesasInativas = $mesasTable->getContaMesasInativas();
 
+        $data_inicio = new Date ($this->request->getQuery('data_inicio'));
+        $data_fim = new Date($this->request->getQuery('data_fim'));
 
-        $this->set(compact('qtdMesasInativas', 'qtdMesasAtivas', 'qtdMesas'));
+        $reservasPorMesa = $mesasTable->getReservasPorMesa($data_inicio, $data_fim, $perfilUser->id );
+        
+        //dd($reservasPorMesa);
+    
+        $this->set(compact('qtdMesasInativas', 'qtdMesasAtivas', 'qtdMesas', 'reservasPorMesa'));
     }
 
     public function reservas()
@@ -55,7 +84,7 @@ class RelatoriosController extends AppController
         $qtdReservasAgendadas = $this->Users->getQtdReservasAgendadas($perfilUser->id);
         $qtdReservasCanceladas = $this->Users->getQtdReservasCanceladas($perfilUser->id);
 
-        
+
         $this->set(compact('qtdReservasAgendadas', 'qtdReservasCanceladas'));
     }
 }

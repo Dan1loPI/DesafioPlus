@@ -14,9 +14,13 @@
         'buttons.bootstrap4.min'
     ]); ?>
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('js') ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
 </head>
 
@@ -34,10 +38,10 @@
     </div>
     <?= $this->Html->script([
         'jquery.min', 'jquery-ui.min', 'bootstrap.bundle.min', 'adminlte', 'dashboard', 'select2.full.min.js',
-        
+
         'dataTables.bootstrap4.min',
-        
-        
+
+
         'dataTables.buttons.min',
         'buttons.bootstrap4.min',
         'jszip.min',
@@ -56,7 +60,6 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
         });
-        
     </script>
 </body>
 

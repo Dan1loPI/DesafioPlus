@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 
 class MesasTable extends Table
@@ -86,4 +87,22 @@ class MesasTable extends Table
             ->count();
         return $query;
     }
+
+    public function getReservasPorMesa($data_inicio, $data_fim, $usuario_id)
+    {
+        $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
+
+        $query = $reservasTable->find();
+           $query->select(['Mesas.num_mesa', "teste" => $query->func()->count('Reservas.mesa_id')])
+            ->contain(['Mesas'])
+            ->where(['Reservas.data_reserva >=' => $data_inicio])
+            ->where(['Reservas.data_reserva <=' => $data_fim])
+            ->where(['Reservas.status =' => 'Finalizado'])
+            ->where(['Reservas.usuario_id =' => $usuario_id])
+            ->group(['Reservas.mesa_id']);
+        return $query;
+    }
+
+
+    
 }
