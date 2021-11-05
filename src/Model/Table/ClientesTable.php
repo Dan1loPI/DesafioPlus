@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 
 class ClientesTable extends Table
@@ -105,5 +106,21 @@ class ClientesTable extends Table
             ->where(['status =' => 'Inativo'])
             ->count();
         return $query;
+    }
+    
+    public function getTopCincoClientes($data_inicio, $data_fim, $usuario_id)
+    {
+        $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
+        $query = $reservasTable->find();
+            $query->select(['Clientes.nome', "qtd_reservas" => $query->func()->count('Reservas.mesa_id')])
+                ->contain(['Clientes'])
+                ->where(['Reservas.data_reserva >=' => $data_inicio])
+                ->where(['Reservas.data_reserva <=' => $data_fim])
+                ->where(['Reservas.status =' => 'Finalizado'])
+                ->where(['Reservas.usuario_id =' => $usuario_id])
+                ->group(['Reservas.cliente_id'])
+                ->order(['qtd_reservas' => 'DESC'])
+                ->limit(5);
+                return $query;
     }
 }

@@ -45,51 +45,36 @@
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-header border-0">
-
-
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+      <div class="card-header border-0">
       <div class="row ">
-        <?= $this->Form->create(null, ['type' => 'get']) ?>
-        <div class="row">
-          <label for="data_inicio">De</label>
-          <?= $this->Form->control('data_inicio', ['class' => 'datepicker form-control', 'value' => $this->request->query('data_inicio'), 'label' => false]) ?>
-          <label for="data_inicio">Até</label>
-          <?= $this->Form->control('data_fim', ['class' => 'datepicker form-control', 'autocomplete' => 'off', 'value' => $this->request->query('data_fim'),  'label' => false]) ?>
-          <button>Procurar</button>
+          <?= $this->Form->create(null, ['type' => 'get']) ?>
+          <div class="row">
+            <label for="data_inicio">De</label>
+            <?= $this->Form->control('data_inicio', ['class' => 'datepicker form-control col-5', 'autocomplete' => 'off', 'value' => $this->request->query('data_inicio'), 'label' => false]) ?>
+            <label for="data_inicio">Até</label>
+            <?= $this->Form->control('data_fim', ['class' => 'datepicker form-control col-5', 'autocomplete' => 'off', 'value' => $this->request->query('data_fim'),  'label' => false]) ?>
+            <button>Procurar</button>
+          </div>
+          <?= $this->Form->end() ?>
         </div>
-        <?= $this->Form->end() ?>
+              Top 5 maiores clientes
       </div>
-
-
-
-    </div>
-    <div class="card-body table-responsive p-0">
-      <table class="table table-striped table-valign-middle">
-        <thead>
-          <tr>
-            <th><?= $this->Paginator->sort('ID') ?></th>
-            <th><?= $this->Paginator->sort('NOME') ?></th>
-            <th><?= $this->Paginator->sort('CPF') ?></th>
-            <th><?= $this->Paginator->sort('DATA DE NASCIMENTO') ?></th>
-            <th><?= $this->Paginator->sort('STATUS') ?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($clientesTable as $cliente) : ?>
-            <tr>
-              <td><?= $this->Number->format($cliente->id) ?></td>
-              <td><?= $cliente->nome ?></td>
-              <td><?= $cliente->cpf ?></td>
-              <td><?= $cliente->data_nasc ?></td>
-              <td><?= $cliente->status ?></td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
+        <table>
+          <tbody>
+            <?php foreach ($topCincoClientes as $cliente) : ?>
+              <tr>
+                <td><?= $cliente->cliente->nome ?></td>
+                <td class="text-orange"><?= $cliente->qtd_reservas ?><br></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+        </div>
     </div>
   </div>
-
 
 </div>
 <script>

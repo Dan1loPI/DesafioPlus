@@ -103,6 +103,16 @@ class MesasTable extends Table
         return $query;
     }
 
-
-    
+    public function getTotalMesas($data_inicio, $data_fim, $usuario_id)
+    {
+        $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
+        $query = $reservasTable->find();
+            $query->select(["somaReserva" => $query->func()->count('Reservas.mesa_id')])
+            ->where(['usuario_id =' => $usuario_id])
+            ->where(['data_reserva >=' => $data_inicio])
+            ->where(['data_reserva <=' => $data_fim])
+            ->where(['status =' => 'Finalizado']);
+            
+            return $query;
+    }
 }

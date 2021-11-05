@@ -21,8 +21,6 @@ class ReservasController extends AppController
 
         $reservasTable = TableRegistry::getTableLocator()->get('reservas');
 
-
-
         $pesquisa = $this->request->getQuery('pesquisa');
         $coluna = $this->request->getQuery('coluna');
 
@@ -31,7 +29,7 @@ class ReservasController extends AppController
                 $coluna = 'Clientes.nome';
                 break;
             case '1':
-                $coluna = 'Mesas.num_mesa';
+                $coluna = (int) 'Mesas.num_mesa';
                 break;
 
             case '2':
@@ -52,6 +50,7 @@ class ReservasController extends AppController
             ];
         } else {
             $reservasTable = $this->Reservas->find()
+                ->contain(['Clientes','Mesas'])
                 ->where([$coluna . ' LIKE' => "%$pesquisa%"]);
         }
 
