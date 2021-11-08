@@ -45,7 +45,7 @@
                             <div class="col-md-3">
                             <div class="form-group">
                                 <label>Status</label>
-                                <?= $this->Form->select('status',['Agendado', 'Em Andamento', 'Finalizado', 'Cancelado'], ['class' => 'form-control']); ?>
+                                <?= $this->Form->select('status',['Agendado', 'Finalizado', 'Cancelado'], ['class' => 'form-control']); ?>
                             </div>
                         </div>
                         </div>

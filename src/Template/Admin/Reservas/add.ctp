@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label>Data da Reserva</label>
-                                <?= $this->Form->control('data_reserva', ['class' => 'form-control', 'label' => false]) ?>
+                                <?= $this->Form->control('data_reserva', ['class' => 'datepicker form-control', 'label' => false]) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -69,3 +69,10 @@
         </div>
     </div>
 </section>
+<script>
+  $(function() {
+    $(".datepicker").datepicker({
+      'dateFormat': 'dd-mm-yy'
+    });
+  });
+</script>

@@ -28,12 +28,12 @@
                         </h3>
                     </div>
                     <div class="row ">
-                        <?= $this->Form->create($pesquisa = null,['type' => 'get']) ?>
-                       <div class="row">
-                        <?= $this->Form->select('coluna', ['CLIENTE', 'Nº MESA', 'STATUS'], ['class' => 'form-control col-3']); ?>
+                        <?= $this->Form->create($pesquisa = null, ['type' => 'get']) ?>
+                        <div class="row">
+                            <?= $this->Form->select('coluna', ['CLIENTE', 'Nº MESA', 'STATUS'], ['class' => 'form-control col-3']); ?>
                             <?= $this->Form->control('pesquisa', ['class' => 'form-control', 'placeholder' => 'Digite o que deseja buscar', 'label' => false]) ?>
                             <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Pesquisar', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
-                            </div>
+                        </div>
                         <?= $this->Form->end() ?>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $this->Number->format($reserva->id) ?></td>
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->has('cliente') ? $this->Html->link($reserva->cliente->nome, ['controller' => 'Clientes', 'action' => 'view', $reserva->cliente->id]) : '' ?></td>
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->has('mesa') ? $this->Html->link('Nº ' . $reserva->mesa->num_mesa, ['controller' => 'Mesas', 'action' => 'view', $reserva->mesa->id]) : '' ?></td>
-                                    <td class="text-center text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->data_reserva ?></td>
+                                    <td class="text-center <?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->data_reserva ?></td>
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->observacao ?></td>
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->status ?></td>
                                     <td class="text-center py-0 align-middle col-sm-1">
@@ -84,7 +84,6 @@
                 <?= $this->element('pagination'); ?>
             </div>
         </div>
-    </div>
     </div>
 </section>
 

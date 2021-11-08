@@ -133,21 +133,36 @@ class ReservasTable extends Table
         return $consultaMesa;
     }
 
-    public function getQtdReservasFinalizadas($usuario_id)
+    public function getQtdReservasFinalizadas($data_inicio, $data_fim, $usuario_id)
     {
         $query = $this->find()
-            ->where(['status ='=> 'Finalizado' ])
+            ->where(['data_reserva >=' => $data_inicio])
+            ->where(['data_reserva <=' => $data_fim])
+            ->where(['status =' => 'Finalizado'])
             ->where(['usuario_id =' => $usuario_id])
             ->count();
-            return $query;
+        return $query;
     }
 
-    public function getQtdReservasCanceladas($usuario_id)
+    public function getQtdReservasCanceladas($data_inicio, $data_fim, $usuario_id)
     {
         $query = $this->find()
-        ->where(['status ='=> 'Cancelado' ])
-        ->where(['usuario_id =' => $usuario_id])
-        ->count();
+            ->where(['data_reserva >=' => $data_inicio])
+            ->where(['data_reserva <=' => $data_fim])
+            ->where(['status =' => 'Cancelado'])
+            ->where(['usuario_id =' => $usuario_id])
+            ->count();
+        return $query;
+    }
+
+    public function getFiltroReserva($data_inicio, $data_fim, $usuario_id)
+    {
+        $query = $this->find()
+        ->contain(['Clientes', 'Mesas'])
+            ->select(['id', 'Clientes.nome', 'Mesas.num_mesa', 'data_reserva', 'status'])
+            ->where(['data_reserva >=' => $data_inicio])
+            ->where(['data_reserva <=' => $data_fim])
+            ->where(['reservas.usuario_id =' => $usuario_id]);
         return $query;
     }
 }

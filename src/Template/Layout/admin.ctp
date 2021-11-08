@@ -38,10 +38,7 @@
     </div>
     <?= $this->Html->script([
         'jquery.min', 'jquery-ui.min', 'bootstrap.bundle.min', 'adminlte', 'dashboard', 'select2.full.min.js',
-
         'dataTables.bootstrap4.min',
-
-
         'dataTables.buttons.min',
         'buttons.bootstrap4.min',
         'jszip.min',
@@ -50,17 +47,10 @@
         'buttons.html5.min',
         'buttons.print.min'
     ]) ?>
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-        });
-    </script>
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
 </body>
 
 </html>

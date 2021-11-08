@@ -50,6 +50,7 @@ class ClientesTable extends Table
         $validator
             ->scalar('cpf')
             ->maxLength('cpf', 11, 'Formato de CPF inválido.')
+            ->minLength('cpf', 11, 'Formato de CPF inválido.')
             ->requirePresence('cpf', 'create')
             ->notEmptyString('cpf')
             ->numeric('cpf', 'Apenas Números')

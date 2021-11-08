@@ -7,6 +7,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 class MesasTable extends Table
@@ -17,7 +19,7 @@ class MesasTable extends Table
         parent::initialize($config);
 
         $this->setTable('mesas');
-        $this->setDisplayField('num_mesa');
+        $this->setDisplayField('num_mesa','num_cadeira');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -114,5 +116,42 @@ class MesasTable extends Table
             ->where(['status =' => 'Finalizado']);
             
             return $query;
+    }
+
+    public function list()
+    {
+        $this->loadModel('Mesas');
+
+        $mesasTable = TableRegistry::getTableLocator()->get('mesas');
+        $dados = $mesasTable->find();
+     
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Teste');
+        $sheet->getStyle('A1:G1')->getBorders()->getOutline()->setBorderStyle(true);
+        $sheet->setCellValue('A1', 'id');
+        $sheet->setCellValue('B1', 'usuario_id');
+        $sheet->setCellValue('C1', 'num_mesa');
+        $sheet->setCellValue('D1', 'num_cadeira');
+        $sheet->setCellValue('E1', 'status');
+        $sheet->setCellValue('F1', 'created');
+        $sheet->setCellValue('G1', 'modified');
+        $line = 2;
+
+        foreach ($dados as $item){
+            $sheet->setCellValueByColumnAndRow(1, $line, $item->id);
+            $sheet->setCellValueByColumnAndRow(2, $line, $item->usuario_id);
+            $sheet->setCellValueByColumnAndRow(3, $line, $item->num_mesa);
+            $sheet->setCellValueByColumnAndRow(4, $line, $item->num_cadeira);
+            $sheet->setCellValueByColumnAndRow(5, $line, $item->status);
+            $sheet->setCellValueByColumnAndRow(6, $line, $item->created);
+            $sheet->setCellValueByColumnAndRow(7, $line, $item->modified);
+            $line++;
+        }
+
+        $documento = new Xlsx($spreadsheet);
+        $filename = "report-" . time() . ",xlsx";
+
+        $documento->save($filename);
     }
 }
