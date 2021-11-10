@@ -48,11 +48,8 @@ class AppController extends Controller
                 }else{
                     
                     $user = TableRegistry::getTableLocator()->get('users');
-
                     $perfilUser = $user->getUserDados($this->Auth->user('id')); 
-                    
                     $this->set(compact('perfilUser'));
-
                     $this->viewBuilder()->setLayout('admin');
                     
                 }

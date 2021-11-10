@@ -18,36 +18,6 @@ class RelatoriosController extends AppController
 
     public function clientes()
     {
-        $this->loadModel('Clientes');
-        $user = TableRegistry::getTableLocator()->get('users');
-        $perfilUser = $user->getUserDados($this->Auth->user('id'));
-
-        $data_inicio = null;
-        $clientesTable = TableRegistry::getTableLocator()->get('clientes');
-        $qtdClientes = $clientesTable->getContaClientes();
-        $qtdClientesAtivos = $clientesTable->getContaClientesAtivos();
-        $qtdClientesInativos = $clientesTable->getContaClientesInativos();
-
-        $data_inicio = new Date($this->request->getQuery('data_inicio'));
-        $data_fim = new Date($this->request->getQuery('data_fim'));
-
-        $topCincoClientes = $clientesTable->getTopCincoClientes($data_inicio, $data_fim, $perfilUser->id);
-
-        $conditions = [];
-
-        if ($data_inicio && $data_fim) {
-            $conditions[] = [
-                'data_nasc >=' => $data_inicio,
-                'data_nasc <=' => $data_fim,
-            ];
-        }
-
-        $this->paginate = [
-            'conditions' => $conditions
-        ];
-
-        $clientesTable = $this->paginate($this->Clientes);
-        $this->set(compact('qtdClientes', 'qtdClientesAtivos', 'qtdClientesInativos', 'clientesTable', 'topCincoClientes'));
     }
 
     public function mesas()
@@ -106,9 +76,11 @@ class RelatoriosController extends AppController
 
         $qtdReservasAgendadas = $this->Users->getQtdReservasAgendadas($perfilUser->id);
         $qtdReservasCanceladas = $this->Users->getQtdReservasCanceladas($perfilUser->id);
+        
+        $topDezFun = $this->Users->topDezFuncionarios();
 
 
-        $this->set(compact('qtdReservasAgendadas', 'qtdReservasCanceladas'));
+        $this->set(compact('qtdReservasAgendadas', 'qtdReservasCanceladas','topDezFun'));
     }
 
     public function exportMesas()
@@ -116,8 +88,7 @@ class RelatoriosController extends AppController
 
         $this->loadModel('Mesas');
 
-        $mesasTable = TableRegistry::getTableLocator()->get('mesas');
-        $dados = $mesasTable->find();
+        $dados = $this->Mesas->find();
 
 
         $spreadsheet = new Spreadsheet();
@@ -154,6 +125,30 @@ class RelatoriosController extends AppController
 
     public function exportClientes()
     {
-        
+        $this->loadModel('Clientes');
+        $data = new Date();
+        $mes = $data->month - 1;
+
+        if($this->Clientes->gerarXlxsClientes($mes)){
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        }else{
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        }
+
+       
+    }
+    public function exportFuncionarios()
+    {
+        $this->loadModel('Users');
+
+        if($this->Users->gerarXlxsUsuarios()){
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        }else{
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        }
     }
 }

@@ -7,6 +7,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class UsersTable extends Table
 {
@@ -131,5 +133,70 @@ class UsersTable extends Table
             ->count();
 
         return $query;
+    }
+
+    public function topDezFuncionarios()
+    {
+        $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
+
+        $query = $reservasTable->find();
+            $query->select(['Users.id', 'Users.nome','qtd_reservas' => $query->func()->count('Reservas.usuario_id')])
+            ->contain(['Users'])
+            ->group(['Users.id']);
+            
+        return $query;
+    }
+
+    public function gerarXlxsUsuarios()
+    {
+        $dados = $this->topDezFuncionarios();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Relatorio');
+        $spreadsheet->getActiveSheet()->mergeCells('A1:B1');
+        $sheet->setCellValue('A1', 'Top 10 Funcionarios ');
+        $spreadsheet->getActiveSheet()->getStyle('A1')
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:B2')->getBorders()->getOutline()->setBorderStyle(true);
+        $sheet->setCellValue('A2', 'Funcionario');
+        $sheet->setCellValue('B2', 'Quantidade de reservas');
+        $spreadsheet->getActiveSheet()
+            ->getStyle('A2:B2')
+            ->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKGREEN);
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(130, 'pt');
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(130, 'pt');
+
+        $line = 3;
+        $soma = 0;
+
+        foreach ($dados as $item) {
+
+            $soma = $item->qtd_reservas + $soma;
+            $sheet->setCellValueByColumnAndRow(1, $line, $item->user->nome);
+            $sheet->setCellValueByColumnAndRow(2, $line, $item->qtd_reservas);
+            $line++;
+        }
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $richText->createText('Total de reservas:' . $soma);
+        $spreadsheet->getActiveSheet()->getCell('B' . $line)->setValue($richText);
+        $spreadsheet->getActiveSheet()->getStyle('B' . $line)
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+        $documento = new Xlsx($spreadsheet);
+        $filename = "Relatorio-" .time() . ".xlsx";
+        $destino = WWW_ROOT . "relatorios" . DS . "users" . DS;
+
+
+        if ($documento->save($destino . $filename)) {
+            $resultado = false;
+        } else {
+            $resultado = true;
+        }
+
+        return $resultado;
     }
 }
