@@ -36,7 +36,6 @@
                                 $this->Form->templates(
                                     ['dateWidget' => '{{day}}{{month}}{{year}}{{hour}}{{minute}}']
                                 );
-
                                 ?>
 
                                 <?= $this->Form->control('cliente_id', ['class' => 'form-control', 'label' => false]) ?>
@@ -49,7 +48,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label> Selecione uma mesa</label>
-                                <?= $this->Form->control('mesa_id', ['class' => 'form-control', 'label' => false]) ?>
+                                <?= $this->Form->control('mesa_id', ['options' => $mesas, 'class' => 'form-control', 'label' => false]) ?>
                             </div>
                         </div>
                         <div class="row">
@@ -64,15 +63,8 @@
                     <div class="text-right">
                         <?= $this->Form->button('<i class="fa fa-save" aria-hidden="true"></i> Salvar', ['class' => 'btn  btn-sm btn-outline-primary col-12 col-sm-3 col-md-2 col-lg-2 col-xl-2'], ['escape' => false]) ?>
                     </div>
-                </div>         
+                </div>
             </div>
         </div>
     </div>
 </section>
-<script>
-  $(function() {
-    $(".datepicker").datepicker({
-      'dateFormat': 'dd-mm-yy'
-    });
-  });
-</script>

@@ -187,7 +187,7 @@ class UsersTable extends Table
             ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
         $documento = new Xlsx($spreadsheet);
-        $filename = "Relatorio-" .time() . ".xlsx";
+        $filename = "Relatorio.xlsx";
         $destino = WWW_ROOT . "relatorios" . DS . "users" . DS;
 
 

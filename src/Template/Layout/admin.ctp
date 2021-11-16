@@ -37,15 +37,8 @@
         </div>
     </div>
     <?= $this->Html->script([
-        'jquery.min', 'jquery-ui.min', 'bootstrap.bundle.min', 'adminlte', 'dashboard', 'select2.full.min.js',
-        'dataTables.bootstrap4.min',
-        'dataTables.buttons.min',
-        'buttons.bootstrap4.min',
-        'jszip.min',
-        'pdfmake.min',
-        'vfs_fonts',
-        'buttons.html5.min',
-        'buttons.print.min'
+        'jquery.min', 'jquery-ui.min', 'bootstrap.bundle.min', 'adminlte', 'select2.full.min.js',
+       
     ]) ?>
 
 <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>

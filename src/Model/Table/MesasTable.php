@@ -19,7 +19,7 @@ class MesasTable extends Table
         parent::initialize($config);
 
         $this->setTable('mesas');
-        $this->setDisplayField('num_mesa','num_cadeira');
+        $this->setDisplayField('num_mesa');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -90,17 +90,16 @@ class MesasTable extends Table
         return $query;
     }
 
-    public function getReservasPorMesa($data_inicio, $data_fim, $usuario_id)
+    public function getReservasPorMesa($data_inicio, $data_fim)
     {
         $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
 
         $query = $reservasTable->find();
-           $query->select(['Mesas.num_mesa', "teste" => $query->func()->count('Reservas.mesa_id')])
+        $query->select(['Mesas.num_mesa', "qtd_reserva" => $query->func()->count('Reservas.mesa_id')])
             ->contain(['Mesas'])
             ->where(['Reservas.data_reserva >=' => $data_inicio])
             ->where(['Reservas.data_reserva <=' => $data_fim])
             ->where(['Reservas.status =' => 'Finalizado'])
-            ->where(['Reservas.usuario_id =' => $usuario_id])
             ->group(['Reservas.mesa_id']);
         return $query;
     }
@@ -109,49 +108,66 @@ class MesasTable extends Table
     {
         $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
         $query = $reservasTable->find();
-            $query->select(["somaReserva" => $query->func()->count('Reservas.mesa_id')])
+        $query->select(["somaReserva" => $query->func()->count('Reservas.mesa_id')])
             ->where(['usuario_id =' => $usuario_id])
             ->where(['data_reserva >=' => $data_inicio])
             ->where(['data_reserva <=' => $data_fim])
             ->where(['status =' => 'Finalizado']);
-            
-            return $query;
+
+        return $query;
     }
 
-    public function list()
+    public function gerarXlsxMesas($data_inicio, $data_fim)
     {
-        $this->loadModel('Mesas');
+        $dados = $this->getReservasPorMesa($data_inicio, $data_fim);
 
-        $mesasTable = TableRegistry::getTableLocator()->get('mesas');
-        $dados = $mesasTable->find();
-     
+  
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Teste');
-        $sheet->getStyle('A1:G1')->getBorders()->getOutline()->setBorderStyle(true);
-        $sheet->setCellValue('A1', 'id');
-        $sheet->setCellValue('B1', 'usuario_id');
-        $sheet->setCellValue('C1', 'num_mesa');
-        $sheet->setCellValue('D1', 'num_cadeira');
-        $sheet->setCellValue('E1', 'status');
-        $sheet->setCellValue('F1', 'created');
-        $sheet->setCellValue('G1', 'modified');
-        $line = 2;
+        $sheet->setTitle('Relatorio');
+        $spreadsheet->getActiveSheet()->mergeCells('A1:B1');
+        $sheet->setCellValue('A1', 'Quantidade de reservas por mesa entre : '. date_format($data_inicio, 'd-m-Y') . ' até ' . date_format($data_fim, 'd-m-Y'));
+        $spreadsheet->getActiveSheet()->getStyle('A1')
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:B2')->getBorders()->getOutline()->setBorderStyle(true);
+        $sheet->setCellValue('A2', 'Mesa');
+        $sheet->setCellValue('B2', 'Quantidade de reservas');
+        $spreadsheet->getActiveSheet()
+            ->getStyle('A2:B2')
+            ->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKGREEN);
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(180, 'pt');
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(180, 'pt');
 
-        foreach ($dados as $item){
-            $sheet->setCellValueByColumnAndRow(1, $line, $item->id);
-            $sheet->setCellValueByColumnAndRow(2, $line, $item->usuario_id);
-            $sheet->setCellValueByColumnAndRow(3, $line, $item->num_mesa);
-            $sheet->setCellValueByColumnAndRow(4, $line, $item->num_cadeira);
-            $sheet->setCellValueByColumnAndRow(5, $line, $item->status);
-            $sheet->setCellValueByColumnAndRow(6, $line, $item->created);
-            $sheet->setCellValueByColumnAndRow(7, $line, $item->modified);
+        $line = 3;
+        $soma = 0;
+
+        foreach ($dados as $item) {
+
+            $soma = $item->qtd_reserva + $soma;
+            $sheet->setCellValueByColumnAndRow(1, $line, $item->mesa->num_mesa);
+            $sheet->setCellValueByColumnAndRow(2, $line, $item->qtd_reserva);
             $line++;
         }
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $richText->createText('Total de reservas:' . $soma);
+        $spreadsheet->getActiveSheet()->getCell('B' . $line)->setValue($richText);
+        $spreadsheet->getActiveSheet()->getStyle('B' . $line)
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
         $documento = new Xlsx($spreadsheet);
-        $filename = "report-" . time() . ",xlsx";
+        $filename = "Relatorio.xlsx";
+        $destino = WWW_ROOT . "relatorios" . DS . "mesas" . DS;
 
-        $documento->save($filename);
+        if ($documento->save($destino . $filename)) {
+            $resultado = false;
+        } else {
+            $resultado = true;
+        }
+
+        return $resultado;
+    
     }
 }

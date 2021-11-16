@@ -7,6 +7,9 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Cake\I18n\FrozenTime;
 
 /**
  * Reservas Model
@@ -158,11 +161,80 @@ class ReservasTable extends Table
     public function getFiltroReserva($data_inicio, $data_fim, $usuario_id)
     {
         $query = $this->find()
-        ->contain(['Clientes', 'Mesas'])
+            ->contain(['Clientes', 'Mesas'])
             ->select(['id', 'Clientes.nome', 'Mesas.num_mesa', 'data_reserva', 'status'])
             ->where(['data_reserva >=' => $data_inicio])
             ->where(['data_reserva <=' => $data_fim])
             ->where(['reservas.usuario_id =' => $usuario_id]);
         return $query;
+    }
+
+    public function getReservasPorDia($data_inicio, $data_fim)
+    {
+        $query = $this->find();
+        $query->select(['data_reserva', "qtd_reserva" => $query->func()->count('data_reserva')])
+            ->where(['data_reserva >=' => $data_inicio])
+            ->where(['data_reserva <=' => $data_fim])
+            ->where(['status =' => 'Finalizado'])
+            ->group('data_reserva');
+            return $query;
+    }
+
+    public function gerarXlxsReserva()
+    {
+        $dataTempo = FrozenTime::now()->modify('-1 month');
+        $data_inicio = $dataTempo->startOfMonth();
+        $data_fim = $dataTempo->endOfMonth();
+
+        $dados = $this->getReservasPorDia($data_inicio, $data_fim);
+
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Relatorio');
+        $spreadsheet->getActiveSheet()->mergeCells('A1:B1');
+        $sheet->setCellValue('A1', 'Quantidade de reservas por dia no ultimo mês');
+        $spreadsheet->getActiveSheet()->getStyle('A1')
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:B2')->getBorders()->getOutline()->setBorderStyle(true);
+        $sheet->setCellValue('A2', 'data_reserva');
+        $sheet->setCellValue('B2', 'Quantidade de reservas');
+        $spreadsheet->getActiveSheet()
+            ->getStyle('A2:B2')
+            ->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKGREEN);
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(130, 'pt');
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(130, 'pt');
+
+        $line = 3;
+        $soma = 0;
+
+        foreach ($dados as $item) {
+
+            $soma = $item->qtd_reserva + $soma;
+            $sheet->setCellValueByColumnAndRow(1, $line, date_format($item->data_reserva, 'd/m/yy'));
+            $sheet->setCellValueByColumnAndRow(2, $line, $item->qtd_reserva);
+            $line++;
+        }
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $richText->createText('Total de reservas:' . $soma);
+        $spreadsheet->getActiveSheet()->getCell('B' . $line)->setValue($richText);
+        $spreadsheet->getActiveSheet()->getStyle('B' . $line)
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+        $documento = new Xlsx($spreadsheet);
+        $filename = "Relatorio.xlsx";
+        $destino = WWW_ROOT . "relatorios" . DS . "reservas" . DS;
+
+
+        if ($documento->save($destino . $filename)) {
+            $resultado = false;
+        } else {
+            $resultado = true;
+        }
+
+        return $resultado;
     }
 }

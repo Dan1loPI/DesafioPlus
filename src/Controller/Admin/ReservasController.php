@@ -106,7 +106,6 @@ class ReservasController extends AppController
     
         $mesas = $this->Reservas->Mesas->find('list', [
             'conditions' => ['status =' => 1],
-            'limit' => 50,
         ]);
         
         $this->set(compact('reserva', 'clientes', 'mesas'));
@@ -182,4 +181,7 @@ class ReservasController extends AppController
         $this->viewBuilder()->setClassName('CsvView.Csv');
         $this->set(compact('data', '_serialize'));
     }
+
+
+    
 }
