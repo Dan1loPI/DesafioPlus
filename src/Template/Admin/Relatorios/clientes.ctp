@@ -12,12 +12,12 @@ use Cake\I18n\Date;
       <table class="table table-striped projects">
         <thead>
           <tr>
-            <th style="width: 36%">
+            <th style="width: 30%">
               Tipos de relatórios
             </th>
-            <th style="width: 54%">
+            <th style="width: 60%">
             </th>
-            <th style="width: 5%">
+            <th style="width: 6%">
             </th>
           </tr>
         </thead>
@@ -25,7 +25,7 @@ use Cake\I18n\Date;
           <tr>
             <td>
               <a>
-                Quantidade de reservas feita por dia no ultimo mês.
+                Top 10 clientes do último mês.
               </a>
               <br />
             </td>
@@ -41,7 +41,7 @@ use Cake\I18n\Date;
           <tr>
             <td>
               <a>
-                Quantidade de reserva por data.
+                Filtro por data.
               </a>
 
             </td>
@@ -60,8 +60,6 @@ use Cake\I18n\Date;
               <?php if($arquivoData): ?>
                 <?= $this->Html->link('Download ', '/relatorios/clientes/data/Relatorio.xlsx', ['download' => 'Relatorio.xlsx', 'class' => 'btn btn-sm btn-success']) ?>
                 <?php endif ?>
-
-                
             </td>
           </tr>
         </tbody>

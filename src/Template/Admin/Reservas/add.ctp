@@ -68,3 +68,14 @@
         </div>
     </div>
 </section>
+<script>
+    $(function() {
+        $('select[name="mesa_id"]').change(function() {
+
+            var mesa_id = $(this);
+           $.post(mesa_id.data('action'), {}, function(response){
+               console.log(response);
+           }, 'json')
+        });
+    });
+</script>

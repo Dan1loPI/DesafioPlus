@@ -30,7 +30,7 @@
                     <div class="row ">
                         <?= $this->Form->create($pesquisa = null, ['type' => 'get']) ?>
                         <div class="row">
-                            <?= $this->Form->select('coluna', ['CLIENTE', 'Nº MESA', 'STATUS'], ['class' => 'form-control col-3']); ?>
+                            <?= $this->Form->select('coluna', ['CLIENTE'], ['class' => 'form-control col-3']); ?>
                             <?= $this->Form->control('pesquisa', ['class' => 'form-control', 'placeholder' => 'Digite o que deseja buscar', 'label' => false]) ?>
                             <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Pesquisar', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
                         </div>
@@ -42,11 +42,11 @@
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th><?= __('ID') ?></th>
-                                <th><?= __('CLIENTE') ?></th>
-                                <th><?= __('Nº MESA') ?></th>
-                                <th class="text-center"><?= __('DATA DA RESERVA') ?></th>
-                                <th><?= __('OBSERVAÇÕES') ?></th>
+                                <th><?= $this->Paginator->sort('id', 'ID') ?></th>
+                                <th><?= $this->Paginator->sort('cliente_id', 'CLIENTE') ?></th>
+                                <th><?= $this->Paginator->sort('mesa_id', 'Nº MESA') ?></th>
+                                <th class="text-center "><?= $this->Paginator->sort('data_reserva', 'DATA DA RESERVA')?></th>
+                                
                                 <th><?= $this->Paginator->sort('STATUS') ?></th>
                                 <th class="actions"><?= __('OPÇÕES') ?></th>
                             </tr>
@@ -58,7 +58,7 @@
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->has('cliente') ? $this->Html->link($reserva->cliente->nome, ['controller' => 'Clientes', 'action' => 'view', $reserva->cliente->id]) : '' ?></td>
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->has('mesa') ? $this->Html->link('Nº ' . $reserva->mesa->num_mesa, ['controller' => 'Mesas', 'action' => 'view', $reserva->mesa->id]) : '' ?></td>
                                     <td class="text-center <?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->data_reserva ?></td>
-                                    <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->observacao ?></td>
+                                    
                                     <td class="text-<?= $reserva->status == 'Finalizado' ? 'success' : ''; ?>"><?= $reserva->status ?></td>
                                     <td class="text-center py-0 align-middle col-sm-1">
                                         <div class="btn-group btn-group-sm">

@@ -45,6 +45,12 @@
                                 <?= $this->Form->control('data_nasc', ['class' => 'form-control', 'label' => false]) ?>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Data de Nascimento</label>
+                                <?= $this->Form->select('status', ['', 'Ativo','Inativo'],['class' => 'form-control', 'label' => false]) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

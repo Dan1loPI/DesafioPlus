@@ -1,4 +1,7 @@
+<?php
 
+use Cake\I18n\Date;
+?>
 <section class="content mt-2">
   <div class="card">
     <div class="card-header">
@@ -8,9 +11,11 @@
       <table class="table table-striped projects">
         <thead>
           <tr>
-            <th style="width: 50%">
+            <th style="width: 26%">
               Tipos de relatório
             </th>
+            <th style="width: 50%"></th>
+            <th style="width: 6%"></th>
           </tr>
         </thead>
         <tbody>
@@ -20,12 +25,37 @@
               Top 10 Funcionários que mais reservaram mesas geral.
               </a>
             </td>
+            <td></td>
             <td class="project-actions text-right">
               <?php if ($arquivo) : ?>
-                <?= $this->Html->link('Download ', '/relatorios/users/' . $arquivo, ['download' => $arquivo, 'class' => 'btn btn-sm btn-success']) ?>
+                <?= $this->Html->link('Download ', '/relatorios/users/Relatorio.xlsx', ['download' => 'Relatorio.xlsx', 'class' => 'btn btn-sm btn-success']) ?>
               <?php else : ?>
                 <?= $this->Html->link('<i class="fas fa-download"></i> Gerar Relatório', ['controller' => 'relatorios', 'action' => 'exportFuncionarios'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
               <?php endif ?>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a>
+                Filtro por data.
+              </a>
+            </td>
+            
+            <td>
+              <?= $this->Form->create(null,['url'=> ['action' => 'exportFuncionariosData',], 'type'=>'get']) ?>
+              <div class="row">
+                <label for="data_inicio">De</label>
+                <?= $this->Form->control('data_inicio', ['class' => 'datepicker form-control  ', 'autocomplete' => 'off', 'value' => date_format(Date::now(), 'd-m-Y'), 'label' => false]) ?>
+                <label for="data_inicio">Até</label>
+                <?= $this->Form->control('data_fim', ['class' => 'datepicker form-control ', 'autocomplete' => 'off', 'value' =>  date_format(Date::now(), 'd-m-Y'),  'label' => false]) ?>
+                <button class="btn btn-success btn-sm">Gerar</button>
+              </div>
+              <?= $this->Form->end() ?>
+            </td>
+            <td class="project-actions text-right">
+              <?php if($arquivoData): ?>
+                <?= $this->Html->link('Download ', '/relatorios/users/data/Relatorio.xlsx', ['download' => 'Relatorio.xlsx', 'class' => 'btn btn-sm btn-success']) ?>
+                <?php endif ?>
             </td>
           </tr>
         </tbody>
@@ -60,3 +90,10 @@
       </div>
     </div>
 </section>
+<script>
+  $(function() {
+    $(".datepicker").datepicker({
+      'dateFormat': 'dd-mm-yy'
+    });
+  });
+</script>

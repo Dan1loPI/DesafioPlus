@@ -67,6 +67,16 @@ class MesasTable extends Table
         return $rules;
     }
 
+    public function BuscarMesa($id)
+    {
+        $reservasTable = TableRegistry::getTableLocator()->get('Reservas');
+
+        $query = $reservasTable->find();
+            $query->contain(['Mesas', 'Users', 'Clientes'])
+            ->where(['Reservas.mesa_id =' => $id]);
+        return $query;
+    }
+
     public function getContaMesas()
     {
         $query = $this->find()
@@ -121,12 +131,12 @@ class MesasTable extends Table
     {
         $dados = $this->getReservasPorMesa($data_inicio, $data_fim);
 
-  
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Relatorio');
         $spreadsheet->getActiveSheet()->mergeCells('A1:B1');
-        $sheet->setCellValue('A1', 'Quantidade de reservas por mesa entre : '. date_format($data_inicio, 'd-m-Y') . ' até ' . date_format($data_fim, 'd-m-Y'));
+        $sheet->setCellValue('A1', 'Quantidade de reservas por mesa entre : ' . date_format($data_inicio, 'd/m/Y') . ' até ' . date_format($data_fim, 'd/m/Y'));
         $spreadsheet->getActiveSheet()->getStyle('A1')
             ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A2:B2')->getBorders()->getOutline()->setBorderStyle(true);
@@ -168,6 +178,5 @@ class MesasTable extends Table
         }
 
         return $resultado;
-    
     }
 }

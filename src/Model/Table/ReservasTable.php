@@ -138,6 +138,11 @@ class ReservasTable extends Table
 
     public function getQtdReservasFinalizadas($data_inicio, $data_fim, $usuario_id)
     {
+
+        $dataTempo = FrozenTime::now();
+        $data_inicio = $dataTempo->startOfMonth();
+        $data_fim = $dataTempo;
+
         $query = $this->find()
             ->where(['data_reserva >=' => $data_inicio])
             ->where(['data_reserva <=' => $data_fim])
@@ -227,6 +232,61 @@ class ReservasTable extends Table
         $documento = new Xlsx($spreadsheet);
         $filename = "Relatorio.xlsx";
         $destino = WWW_ROOT . "relatorios" . DS . "reservas" . DS;
+
+
+        if ($documento->save($destino . $filename)) {
+            $resultado = false;
+        } else {
+            $resultado = true;
+        }
+
+        return $resultado;
+    }
+
+    public function gerarXlxsReservaData($data_inicio, $data_fim)
+    {
+
+        $dados = $this->getReservasPorDia($data_inicio, $data_fim);
+
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Relatorio');
+        $spreadsheet->getActiveSheet()->mergeCells('A1:B1');
+        $sheet->setCellValue('A1', 'Quantidade de reservas por dia entre '. date_format($data_inicio, 'd/m/Y') . ' até ' . date_format($data_fim, 'd/m/Y') );
+        $spreadsheet->getActiveSheet()->getStyle('A1')
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:B2')->getBorders()->getOutline()->setBorderStyle(true);
+        $sheet->setCellValue('A2', 'data_reserva');
+        $sheet->setCellValue('B2', 'Quantidade de reservas');
+        $spreadsheet->getActiveSheet()
+            ->getStyle('A2:B2')
+            ->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKGREEN);
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(160, 'pt');
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(160, 'pt');
+
+        $line = 3;
+        $soma = 0;
+
+        foreach ($dados as $item) {
+
+            $soma = $item->qtd_reserva + $soma;
+            $sheet->setCellValueByColumnAndRow(1, $line, date_format($item->data_reserva, 'd/m/yy'));
+            $sheet->setCellValueByColumnAndRow(2, $line, $item->qtd_reserva);
+            $line++;
+        }
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $richText->createText('Total de reservas:' . $soma);
+        $spreadsheet->getActiveSheet()->getCell('B' . $line)->setValue($richText);
+        $spreadsheet->getActiveSheet()->getStyle('B' . $line)
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+        $documento = new Xlsx($spreadsheet);
+        $filename = "Relatorio.xlsx";
+        $destino = WWW_ROOT . "relatorios" . DS . "reservas" . DS . "data" . DS ;
 
 
         if ($documento->save($destino . $filename)) {

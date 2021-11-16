@@ -82,8 +82,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($mesa->reservas as $reservas) : ?>
-
+                    <?php foreach ($mesaTeste as $reservas) : ?>
+                            
                         <tr>
                             <td><?= $reservas->id ?></td>
                             <td><?= $reservas->user->nome ?></td>

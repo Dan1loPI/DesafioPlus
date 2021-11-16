@@ -28,17 +28,7 @@ class ReservasController extends AppController
             case '0':
                 $coluna = 'Clientes.nome';
                 break;
-            case '1':
-                $coluna = (int) 'Mesas.num_mesa';
-                break;
-
-            case '2':
-                $coluna = 'Reservas.status';
-                break;
-
-            default:
-                $coluna = 'Clientes.nome';
-                break;
+                
         }
 
         if ($pesquisa == null) {
@@ -170,18 +160,12 @@ class ReservasController extends AppController
         }
     }
 
-    public function export()
+    public function getMesa()
     {
-        $this->setResponse($this->getResponse()->withDownload('my-file.xls'));
+       $teste = $this->request->allowMethod('ajax');
 
-
-        $data = $this->Reservas->find('all');
-        $_serialize = 'data';
-
-        $this->viewBuilder()->setClassName('CsvView.Csv');
-        $this->set(compact('data', '_serialize'));
+       var_dump($teste);
     }
-
 
     
 }

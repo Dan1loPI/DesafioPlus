@@ -34,9 +34,14 @@ class MesasController extends AppController
             'contain' => ['Reservas', 'Reservas.Clientes', 'Reservas.Users']
         ]);
 
-      
+        $this->paginate = [
+            'limit' => 5
+        ];
 
-        $this->set(compact('mesa'));
+        $mesaTeste = $this->paginate($this->Mesas->BuscarMesa($id));
+
+
+        $this->set(compact('mesa', 'mesaTeste'));
     }
 
     public function add()

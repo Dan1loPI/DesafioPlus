@@ -19,6 +19,57 @@ class RelatoriosController extends AppController
     {
     }
 
+    public function usuarios()
+    {
+        $this->loadModel('Users');
+        $user = TableRegistry::getTableLocator()->get('users');
+        $perfilUser = $user->getUserDados($this->Auth->user('id'));
+        $data_inicio = new Date($this->request->getQuery('data_inicio'));
+        $data_fim = new Date($this->request->getQuery('data_fim'));
+        $qtdReservasAgendadas = $this->Users->getQtdReservasAgendadas($perfilUser->id);
+        $qtdReservasCanceladas = $this->Users->getQtdReservasCanceladas($perfilUser->id);
+        $topDezFun = $this->Users->topDezFuncionarios();
+        
+        $dir = new Folder(WWW_ROOT . 'relatorios' . DS . 'users' . DS);
+        $arquivo = $dir->find('.*\.xlsx');
+
+        $dirData = new Folder(WWW_ROOT . 'relatorios' . DS . 'users' . DS . 'data' . DS);
+        $arquivoData = $dirData->find('.*\.xlsx');
+       
+
+        $this->set(compact('qtdReservasAgendadas', 'qtdReservasCanceladas', 'topDezFun', 'arquivo', 'arquivoData'));
+    }
+
+    public function exportFuncionarios()
+    {
+        $this->loadModel('Users');
+
+        if ($this->Users->gerarXlxsUsuarios()) {
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'usuarios']);
+        } else {
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'usuarios']);
+        }
+    }
+
+    public function exportFuncionariosData()
+    {
+        $this->loadModel('Users');
+
+        $data_inicio = new Date($this->request->getQuery('data_inicio'));
+        $data_fim = new Date($this->request->getQuery('data_fim'));
+
+        if ($this->Users->gerarXlxsUsuariosData($data_inicio, $data_fim)) {
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'usuarios']);
+        } else {
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'usuarios']);
+        }
+        
+    }
+
     public function clientes()
     {
         $dir = new Folder(WWW_ROOT . 'relatorios' . DS . 'clientes' . DS);
@@ -28,6 +79,37 @@ class RelatoriosController extends AppController
         $arquivoData = $dirData->find('.*\.xlsx');
 
         $this->set(compact('arquivo', 'arquivoData'));
+    }
+
+    public function exportClientes()
+    {
+
+        $this->loadModel('Clientes');
+
+        if ($this->Clientes->gerarXlxsClientes()) {
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        } else {
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        }
+    }
+
+    public function exportClientesData()
+    {
+        $this->loadModel('Clientes');
+
+        $data_inicio = new Date($this->request->getQuery('data_inicio'));
+        $data_fim = new Date($this->request->getQuery('data_fim'));
+        
+            
+        if ($this->Clientes->gerarXlxsClientesData($data_inicio, $data_fim)) {
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        } else {
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
+        }
     }
 
     public function mesas()
@@ -70,82 +152,39 @@ class RelatoriosController extends AppController
 
         $qtdReservasFinalizadas = $reservasTable->getQtdReservasFinalizadas($data_inicio, $data_fim, $perfilUser->id);
         $qtdReservasCanceladas = $reservasTable->getQtdReservasCanceladas($data_inicio, $data_fim, $perfilUser->id);
-        $this->paginate = [
-            'limit' => 7,
-        ];
-        
+      
         $dir = new Folder(WWW_ROOT . 'relatorios' . DS . 'reservas' . DS);
         $arquivo = $dir->find('.*\.xlsx');
 
-        $this->set(compact('qtdReservasFinalizadas', 'qtdReservasCanceladas', 'arquivo'));
+        $dirData = new Folder(WWW_ROOT . 'relatorios' . DS . 'reservas' . DS . 'data' . DS);
+        $arquivoData = $dirData->find('.*\.xlsx');
+
+        $this->set(compact('qtdReservasFinalizadas', 'qtdReservasCanceladas', 'arquivo','arquivoData'));
     }
 
-    public function usuarios()
+    public function exportReservasData()
     {
-        $this->loadModel('Users');
-        $user = TableRegistry::getTableLocator()->get('users');
-        $perfilUser = $user->getUserDados($this->Auth->user('id'));
+        $this->loadModel('Reservas');
+
         $data_inicio = new Date($this->request->getQuery('data_inicio'));
         $data_fim = new Date($this->request->getQuery('data_fim'));
-        $qtdReservasAgendadas = $this->Users->getQtdReservasAgendadas($perfilUser->id);
-        $qtdReservasCanceladas = $this->Users->getQtdReservasCanceladas($perfilUser->id);
-        $topDezFun = $this->Users->topDezFuncionarios();
-        
-        $dir = new Folder(WWW_ROOT . 'relatorios' . DS . 'users' . DS);
-        $arquivos = $dir->find('.*\.xlsx');
-        if (!empty($arquivos[0])) {
-            $arquivo = $arquivos[0];
-        } else {
-            $arquivo = '';
-        }
 
-        $this->set(compact('qtdReservasAgendadas', 'qtdReservasCanceladas', 'topDezFun', 'arquivo'));
+        if ($this->Reservas->gerarXlxsReservaData($data_inicio, $data_fim)) {
+            $this->Flash->success('Relatorio gerado com sucesso!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'reservas']);
+        } else {
+            $this->Flash->error('Relatorio não foi gerado!');
+            return $this->redirect(['controller' => 'relatorios', 'action' => 'reservas']);
+        }
+        
     }
+
+ 
 
    
-    public function exportClientes()
-    {
+    
 
-        $this->loadModel('Clientes');
-
-        if ($this->Clientes->gerarXlxsClientes()) {
-            $this->Flash->success('Relatorio gerado com sucesso!');
-            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
-        } else {
-            $this->Flash->error('Relatorio não foi gerado!');
-            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
-        }
-    }
-
-    public function exportClientesData()
-    {
-        $this->loadModel('Clientes');
-
-        $data_inicio = new Date($this->request->getQuery('data_inicio'));
-        $data_fim = new Date($this->request->getQuery('data_fim'));
-        
-            
-        if ($this->Clientes->gerarXlxsClientesData($data_inicio, $data_fim)) {
-            $this->Flash->success('Relatorio gerado com sucesso!');
-            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
-        } else {
-            $this->Flash->error('Relatorio não foi gerado!');
-            return $this->redirect(['controller' => 'relatorios', 'action' => 'clientes']);
-        }
-    }
-
-    public function exportFuncionarios()
-    {
-        $this->loadModel('Users');
-
-        if ($this->Users->gerarXlxsUsuarios()) {
-            $this->Flash->success('Relatorio gerado com sucesso!');
-            return $this->redirect(['controller' => 'relatorios', 'action' => 'usuarios']);
-        } else {
-            $this->Flash->error('Relatorio não foi gerado!');
-            return $this->redirect(['controller' => 'relatorios', 'action' => 'usuarios']);
-        }
-    }
+   
 
     public function exportReservas()
     {
