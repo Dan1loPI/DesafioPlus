@@ -30,9 +30,9 @@
                     <div class="row ">
                         <?= $this->Form->create($teste = null,['type' => 'get']) ?>
                        <div class="row">
-                        <?= $this->Form->select('coluna', ['NOME', 'EMAIL'], ['class' => 'form-control col-2']); ?>
+                        <?= $this->Form->select('coluna', ['NOME', 'EMAIL'], ['class' => 'form-control col-3']); ?>
                             <?= $this->Form->control('pesquisa', ['class' => 'form-control', 'placeholder' => 'Digite o que deseja buscar', 'label' => false]) ?>
-                            <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i> Pesquisar', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
+                            <?= $this->Form->button('<i class="fa fa-search" aria-hidden="true"></i>', ['class' => 'btn  btn-sm btn-outline-primary '], ['escape' => false]) ?>
                             </div>
                         <?= $this->Form->end() ?>
                     </div>
@@ -43,10 +43,10 @@
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th><?= $this->Paginator->sort('ID') ?></th>
-                                <th><?= $this->Paginator->sort('NOME') ?></th>
-                                <th><?= $this->Paginator->sort('EMAIL') ?></th>
-                                <th><?= $this->Paginator->sort('STATUS') ?></th>
+                                <th><?= $this->Paginator->sort('id','ID') ?></th>
+                                <th><?= $this->Paginator->sort('nome','NOME') ?></th>
+                                <th><?= $this->Paginator->sort('email','EMAIL') ?></th>
+                                <th><?= $this->Paginator->sort('status','STATUS') ?></th>
                                 <th><?= __('Opções') ?></th>
 
                             </tr>

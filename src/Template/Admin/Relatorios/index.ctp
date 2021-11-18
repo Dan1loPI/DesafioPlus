@@ -19,7 +19,7 @@
                                     <div class="inner">
                                         <h3>Usuários</h3>
 
-                                        <p>New Orders</p>
+                                        
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-cogs"></i>
@@ -32,7 +32,7 @@
                                     <div class="inner">
                                         <h3>Clientes</h3>
 
-                                        <p>New Orders</p>
+                                        
                                     </div>
                                     <div class="icon">
                                         <i class="fas fa-users"></i>
@@ -45,7 +45,7 @@
                                     <div class="inner">
                                         <h3>Mesas</h3>
 
-                                        <p>New Orders</p>
+                                        
                                     </div>
                                     <div class="icon">
                                         <i class="fas fa-table"></i>
@@ -58,7 +58,7 @@
                                     <div class="inner">
                                         <h3>Reservas</h3>
 
-                                        <p>New Orders</p>
+                                       
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-address-book"></i>

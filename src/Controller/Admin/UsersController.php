@@ -16,7 +16,7 @@ class UsersController extends AppController
         $this->paginate = [
             'limit' => 8
         ];
-        $pesquisa = $this->request->getQuery('teste');
+        $pesquisa = $this->request->getQuery('pesquisa');
 
         $coluna = $this->request->getQuery('coluna');
 
@@ -164,7 +164,6 @@ class UsersController extends AppController
     {
         if ($this->request->is('post')) { // request para receber os dasdos is para verificar se é via post
             $user =  $this->Auth->identify();
-
             if ($user) {
                 if ($user['status'] == true) {
                     $this->Auth->setUser($user);
@@ -188,6 +187,31 @@ class UsersController extends AppController
     {
         $user_id = $this->Auth->user('id');
         $user = $this->Users->get($user_id);
+
+        $this->set(compact('user'));
+    }
+
+    public function alteraSenha($id = null)
+    {
+        $user = $this->Users->get($id);
+
+       $senhaAntiga = $user->password;
+       if($this->request->is(['post', 'patch', 'put'])){
+        $user = $this->Users->patchEntity($user, $this->request->getData());
+
+        if($user->nova_senha == $user->confirma_senha){
+            $this->password = $user->nova_senha;
+            
+            if($this->Users->save($user)){
+                $this->Flash->success('Senha alterada com sucesso');
+                return $this->redirect(['controller' => 'Users' , 'action' => 'perfil']);
+            }
+
+            $this->Flash->error('As senha não conferrem!');
+        }
+
+        
+       }
 
         $this->set(compact('user'));
     }

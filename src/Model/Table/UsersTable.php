@@ -155,7 +155,7 @@ class UsersTable extends Table
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Relatorio');
         $spreadsheet->getActiveSheet()->mergeCells('A1:B1');
-        $sheet->setCellValue('A1', 'Top 10 Funcionarios ');
+        $sheet->setCellValue('A1', 'Top 10 Funcionários ');
         $spreadsheet->getActiveSheet()->getStyle('A1')
             ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A2:B2')->getBorders()->getOutline()->setBorderStyle(true);
@@ -181,7 +181,7 @@ class UsersTable extends Table
             $line++;
         }
         $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        $richText->createText('Total de reservas:' . $soma);
+        $richText->createText('Total:' . $soma);
         $spreadsheet->getActiveSheet()->getCell('B' . $line)->setValue($richText);
         $spreadsheet->getActiveSheet()->getStyle('B' . $line)
             ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -245,7 +245,7 @@ class UsersTable extends Table
             $line++;
         }
         $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        $richText->createText('Total de reservas:' . $soma);
+        $richText->createText('Total:' . $soma);
         $spreadsheet->getActiveSheet()->getCell('B' . $line)->setValue($richText);
         $spreadsheet->getActiveSheet()->getStyle('B' . $line)
             ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);

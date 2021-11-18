@@ -18,12 +18,16 @@ class User extends Entity
         'created' => true,
         'modified' => true,
         'confirma_senha' => true,
+        'nova_senha' => true,
+        
+        
     ];
 
 
     protected $_hidden = [
         'password',
         'confirma_senha',
+        'nova_senha'
     ];
 
     public function ConfirmaSenha()
@@ -38,18 +42,20 @@ class User extends Entity
     }
 
     /*
-    protected function _setPassword($password)
+    public function _setNova_senha()
     {
-        if (strlen($password) > 0){
-            return (new DefaultPasswordHasher)->hash($password);
-        }
-
+        $this->nova_senha = (new DefaultPasswordHasher)->hash($this->nova_senha);
     }
 
-    protected function _setConfirmaSenha($confirma_senha){
+    public function _setConfirma_senha()
+    {
+        $this->confirma_senha = (new DefaultPasswordHasher)->hash($this->confirma_senha);
+    }
+*/
 
-        if (strlen($confirma_senha) > 0){
-            return (new DefaultPasswordHasher)->hash($confirma_senha);
-        }
-    }*/
+    public function _setPassword()
+    {
+        $this->password = (new DefaultPasswordHasher)->hash($this->password);
+    }
+
 }

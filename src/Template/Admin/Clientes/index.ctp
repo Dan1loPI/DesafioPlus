@@ -39,11 +39,11 @@
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th><?= $this->Paginator->sort('ID') ?></th>
-                                <th><?= $this->Paginator->sort('NOME') ?></th>
-                                <th><?= $this->Paginator->sort('CPF') ?></th>
-                                <th><?= $this->Paginator->sort('DATA DE NASCIMENTO') ?></th>
-                                <th><?= $this->Paginator->sort('STATUS') ?></th>
+                                <th><?= $this->Paginator->sort('id','ID') ?></th>
+                                <th><?= $this->Paginator->sort('nome','NOME') ?></th>
+                                <th><?= $this->Paginator->sort('cpf','CPF') ?></th>
+                                <th><?= $this->Paginator->sort('data_nasc','DATA DE NASCIMENTO') ?></th>
+                                <th><?= $this->Paginator->sort('status','STATUS') ?></th>
                                 <th><?= __('OPÇÕES') ?></th>
 
                             </tr>

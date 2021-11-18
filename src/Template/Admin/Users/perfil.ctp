@@ -65,9 +65,9 @@
              
                 </div>
                 <div class="card-footer">
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <div class="text-right">
-                            <?= $this->Html->link('<i class="fa fa-user" aria-hidden="true"></i> Editar', ['controller' => 'users', 'action' => 'edit', $user->id ], ['class' => 'btn btn-dark btn-block', 'escape' => false]) ?>
+                            <?= $this->Html->link('<i class="fa fa-user" aria-hidden="true"></i> Alterar Senha', ['controller' => 'users', 'action' => 'alteraSenha', $user->id ], ['class' => 'btn btn-dark btn-block', 'escape' => false]) ?>
                         </div>
                     </div>
                 </div>

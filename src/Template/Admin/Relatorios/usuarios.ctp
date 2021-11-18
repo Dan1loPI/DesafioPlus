@@ -14,24 +14,33 @@ use Cake\I18n\Date;
             <th style="width: 26%">
               Tipos de relatório
             </th>
-            <th style="width: 50%"></th>
-            <th style="width: 6%"></th>
+            <th style="width: 54%"></th>
+            <th style="width: 20%"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
               <a>
-              Top 10 Funcionários que mais reservaram mesas geral.
+                Top 10 Funcionários que mais reservaram mesas geral.
               </a>
             </td>
             <td></td>
             <td class="project-actions text-right">
-              <?php if ($arquivo) : ?>
-                <?= $this->Html->link('Download ', '/relatorios/users/Relatorio.xlsx', ['download' => 'Relatorio.xlsx', 'class' => 'btn btn-sm btn-success']) ?>
-              <?php else : ?>
-                <?= $this->Html->link('<i class="fas fa-download"></i> Gerar Relatório', ['controller' => 'relatorios', 'action' => 'exportFuncionarios'], ['class' => 'btn btn-sm  btn-success', 'escape' => false]) ?>
-              <?php endif ?>
+                <div class="btn-group btn-group-sm">
+                  <?php if (!$arquivo) : ?>
+                    <?= $this->Html->link('Gerar Relatório', ['controller' => 'relatorios', 'action' => 'exportFuncionarios'], ['class' => 'btn btn-sm  btn-outline-success', 'escape' => false]) ?>
+                  <?php else :  ?>
+                    <?= $this->Html->link(
+                      'Gerar Relatório',
+                      ['controller' => 'relatorios', 'action' => 'exportFuncionarios'],
+                      ['class' => 'btn btn-sm  btn-success', 'escape' => false, 'confirm' => __('Deseja subistituir o relatório?')]
+                    ) ?>
+                  <?php endif ?>
+                  <?php if ($arquivo) : ?>
+                    <?= $this->Html->link('Download ', '/relatorios/users/Relatorio.xlsx', ['download' => 'Relatorio.xlsx', 'class' => 'btn btn-sm btn-success']) ?>
+                  <?php endif ?>
+                </div>
             </td>
           </tr>
           <tr>
@@ -40,9 +49,9 @@ use Cake\I18n\Date;
                 Filtro por data.
               </a>
             </td>
-            
+
             <td>
-              <?= $this->Form->create(null,['url'=> ['action' => 'exportFuncionariosData',], 'type'=>'get']) ?>
+              <?= $this->Form->create(null, ['url' => ['action' => 'exportFuncionariosData',], 'type' => 'get']) ?>
               <div class="row">
                 <label for="data_inicio">De</label>
                 <?= $this->Form->control('data_inicio', ['class' => 'datepicker form-control  ', 'autocomplete' => 'off', 'value' => date_format(Date::now(), 'd-m-Y'), 'label' => false]) ?>
@@ -53,9 +62,9 @@ use Cake\I18n\Date;
               <?= $this->Form->end() ?>
             </td>
             <td class="project-actions text-right">
-              <?php if($arquivoData): ?>
+              <?php if ($arquivoData) : ?>
                 <?= $this->Html->link('Download ', '/relatorios/users/data/Relatorio.xlsx', ['download' => 'Relatorio.xlsx', 'class' => 'btn btn-sm btn-success']) ?>
-                <?php endif ?>
+              <?php endif ?>
             </td>
           </tr>
         </tbody>
@@ -64,31 +73,31 @@ use Cake\I18n\Date;
   </div>
 </section>
 <section>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-5">
-          <div class="callout callout-info">
-            <div class="row">
-              <div class="col-10">
-                Total de reservas agendadas por você :
-              </div>
-              <div class="col-2">
-                <p class="text-orange "><?= $qtdReservasAgendadas ?></p>
-              </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-5">
+        <div class="callout callout-info">
+          <div class="row">
+            <div class="col-10">
+              Total de reservas agendadas por você :
             </div>
-            <div class="row">
-              <div class="col-10">
-                Total de reservas canceladas por você :
-              </div>
-              <div class="col-2">
-                <p class="text-orange "><?= $qtdReservasCanceladas ?></p>
-              </div>
+            <div class="col-2">
+              <p class="text-orange "><?= $qtdReservasAgendadas ?></p>
             </div>
-
           </div>
+          <div class="row">
+            <div class="col-10">
+              Total de reservas canceladas por você :
+            </div>
+            <div class="col-2">
+              <p class="text-orange "><?= $qtdReservasCanceladas ?></p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+  </div>
 </section>
 <script>
   $(function() {

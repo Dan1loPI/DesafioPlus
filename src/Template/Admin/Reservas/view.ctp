@@ -47,6 +47,7 @@
                                     <div class="col-6">
                                         <p class="text-muted text-sm"><b>Data da Reserva :</b><?= $reserva->data_reserva ?> </p>
                                         <p class="text-muted text-sm"><b>Status Reserva :</b><?= $reserva->status ?> </p>
+                                        <p class="text-muted text-sm"><b>Observações :</b><?= $reserva->observacao ?> </p>
                                         <?php if ($reserva->status == 'Finalizado') : ?>
                                             <p class="text-muted text-sm"><b>Data da Finalização :</b><?= date_format($reserva->modified, "d/m/Y H:m:s") ?> </p>
                                         <?php endif ?>
@@ -55,7 +56,8 @@
                             </div>
                             <div class="card-footer">
                                 <div class="text-right">
-                                    <?php if ($reserva->status == 'Finalizado') : ?>
+                                    <?php if ($reserva->status =='Finalizado') : ?>
+
                                     <?php else : ?>
                                         <?= $this->Html->link(__('<i class="fa fa-address-book"></i> Editar Reserva'), ['action' => 'edit', $reserva->id], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
                                     <?php endif ?>
